@@ -140,7 +140,10 @@ if( ! function_exists( 'maxson_portfolio_query_args' ) )
 					$field = ( isset( $args["{$key}_field"] ) ) ? $args["{$key}_field"] : 'slug';
 
 					if( ! is_array( $args[ $key ] ) )
+					{
 						$args[ $key ] = array( $args[ $key ] );
+
+					} // endif
 
 					$tax_query = array( 
 						'taxonomy' => $taxonomy, 

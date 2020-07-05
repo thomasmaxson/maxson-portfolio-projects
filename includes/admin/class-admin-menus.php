@@ -35,11 +35,11 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 		public function __construct()
 		{ 
 			add_action( 'admin_head', array( &$this, 'menu_highlight' ) );
-			add_action( 'admin_menu', array( &$this, 'sanitize_settings' ) );
 
 			add_action( 'admin_menu', array( &$this, 'settings_menu' ) );
 			add_action( 'admin_menu', array( &$this, 'tools_menu' ) );
-		//	add_action( 'admin_menu', array( &$this, 'extensions_menu' ) );
+
+			add_action( 'admin_menu', array( &$this, 'sanitize_settings' ) );
 		}
 
 
@@ -51,13 +51,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 
 		public static function menu_highlight()
 		{ 
-			global $parent_file, $submenu_file;
+			global $parent_file, $submenu_file, $post_type;
 
-			if( in_array( self::POST_TYPE, array( self::POST_TYPE ) )  )
+			if( in_array( $post_type, array( self::POST_TYPE ) ) )
 			{ 
 				$screen = get_current_screen();
 
-			//	$taxonomies = get_object_taxonomies( self::POST_TYPE );
 				$taxonomies = array( 'portfolio_type' );
 
 				if( in_array( $screen->taxonomy, $taxonomies ) )
@@ -89,14 +88,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 
 		public static function settings_menu()
 		{ 
-			$capability = apply_filters( 'maxson_portfolio_settings_menu_capability', 'manage_portfolio_settings' );
+			$menu_label    = __( 'Settings', 'maxson' );
+			$menu_title    = __( 'Portfolio Settings', 'maxson' );
+			$menu_location = 'edit.php?post_type=' . self::POST_TYPE;
 
-			if( current_user_can( 'manage_portfolio_settings' ) )
-			{ 
-				$settings_page = add_submenu_page( 'edit.php?post_type=' . self::POST_TYPE, __( 'Portfolio Settings', 'maxson' ), __( 'Settings', 'maxson' ), 
-					$capability, 'portfolio_settings', 'maxson_portfolio_settings_page' );
-
-			} // endif
+			add_submenu_page( $menu_location, $menu_title, $menu_label, 'manage_options', 
+				'portfolio_settings', 'maxson_portfolio_settings_page' );
 		}
 
 
@@ -106,31 +103,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 
 		public static function tools_menu()
 		{ 
-			$capability = apply_filters( 'maxson_portfolio_tools_menu_capability', 'manage_portfolio_tools' );
+			$menu_label    = __( 'Tools', 'maxson' );
+			$menu_title    = __( 'Portfolio Tools', 'maxson' );
+			$menu_location = 'edit.php?post_type=' . self::POST_TYPE;
 
-			if( current_user_can( 'manage_portfolio_tools' ) )
-			{ 
-				$tools_page = add_submenu_page( 'edit.php?post_type=' . self::POST_TYPE, __( 'Portfolio Tools', 'maxson' ), __( 'Tools', 'maxson' ), 
-						$capability, 'portfolio_tools', 'maxson_portfolio_tools_page' );
-
-			} // endif
-		}
-
-
-		/**
-		 * Add menu item
-		 */
-
-		public static function extensions_menu()
-		{ 
-			$capability = apply_filters( 'maxson_portfolio_extensions_menu_capability', 'manage_options' );
-
-			if( current_user_can( 'manage_portfolio_extensions' ) )
-			{ 
-				$extensions_page = add_submenu_page( 'edit.php?post_type=' . self::POST_TYPE, __( 'Portfolio Extensions', 'maxson' ), __( 'Extensions', 'maxson' ), 
-						$capability, 'portfolio_extensions', 'maxson_portfolio_extensions_page' );
-
-			} // endif
+			add_submenu_page( $menu_location, $menu_title, $menu_label, 'manage_options', 
+				'portfolio_tools', 'maxson_portfolio_tools_page' );
 		}
 
 	} // endclass

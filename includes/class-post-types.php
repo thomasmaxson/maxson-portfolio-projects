@@ -34,9 +34,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Post_Types' ) )
 		public function __construct()
 		{ 
 			add_action( 'init', array( &$this, 'register' ) );
-
 			add_action( 'init', array( &$this, 'support_jetpack_omnisearch' ) );
+
 			add_filter( 'rest_api_allowed_post_types', array( &$this, 'rest_api_allowed_post_types' ) );
+
+			add_filter( 'gutenberg_can_edit_post_type', array( &$this, 'gutenberg_can_edit_post_type' ), 10, 2 );
+			add_filter( 'use_block_editor_for_post_type', array( &$this, 'gutenberg_can_edit_post_type' ), 10, 2 );
 		}
 
 
@@ -205,6 +208,20 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Post_Types' ) )
 			do_action( 'maxson_portfolio_after_register_post_type' );
 
 			flush_rewrite_rules();
+		}
+
+
+		/**
+		 * Disable Gutenberg for portfolio
+		 * 
+		 * @param       bool   $can_edit Whether the post type can be edited or not
+		 * @param       string $post_type The post type being checked
+		 * @return      bool
+		 */
+
+		public static function gutenberg_can_edit_post_type( $can_edit, $post_type )
+		{ 
+			return ( self::POST_TYPE === $post_type ) ? false : $can_edit;
 		}
 
 

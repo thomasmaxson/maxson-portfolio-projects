@@ -158,7 +158,7 @@ function maxson_portfolio_settings_page()
 
 			if( ! empty( $output_tabs ) )
 			{
-				printf( '<h2 class="nav-tab-wrapper">%1$s</h2>', $output_tabs );
+				printf( '<nav class="nav-tab-wrapper">%1$s</nav>', $output_tabs );
 
 			} // endif
 		} // endif ?>

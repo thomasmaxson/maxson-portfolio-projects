@@ -220,7 +220,13 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 		{ 
 			if( self::POST_TYPE === $screen->post_type && 'post' === $screen->base )
 			{ 
-				$hidden = array_merge( $hidden, array( 'slugdiv', 'authordiv', 'postcustom', 'revisionsdiv', 'trackbacksdiv', ) );
+				$hidden = array_merge( array( 
+					'authordiv', 
+					'postcustom', 
+					'revisionsdiv', 
+					'slugdiv', 
+					'trackbacksdiv'
+				), $hidden );
 
 			} // endif
 

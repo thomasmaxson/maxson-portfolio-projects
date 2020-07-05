@@ -154,7 +154,7 @@ function maxson_portfolio_tools_page()
 
 			} // endforeach
 
-			printf( '<h2 class="nav-tab-wrapper">%1$s</h2>', $output_tabs );
+			printf( '<nav class="nav-tab-wrapper">%1$s</nav>', $output_tabs );
 
 		} // endif ?>
 	

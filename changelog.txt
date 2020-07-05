@@ -2,6 +2,7 @@
 
 = 2.4 04-Jul-2020 =
 * UPDATED portfolio post type overview table to output via abstract class
+* ADDED Portfolio_Query class
 * REMOVED plugin tracking capabilities
 
 

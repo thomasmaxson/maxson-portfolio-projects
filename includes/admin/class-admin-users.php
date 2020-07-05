@@ -71,7 +71,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Users' ) )
 
 				$count = apply_filters( 'maxson_portfolio_user_column_count', $user_post_count, $user_id );
 
-				if( ( $count > 0 ) && current_user_can( 'read_projects' ) )
+				if( ( $count > 0 ) && current_user_can( 'edit_posts' ) )
 				{ 
 					$query_args = array( 
 						'post_status' => 'publish', 
