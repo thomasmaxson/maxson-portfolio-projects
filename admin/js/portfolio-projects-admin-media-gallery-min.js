@@ -1,0 +1,1 @@
+!function(e,$){"use strict";var t,d;t=e.MediaWidgetModel.extend({}),d=e.MediaWidgetControl.extend({})}(wp.projectMedia,jQuery);

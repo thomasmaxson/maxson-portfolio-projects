@@ -1,0 +1,28 @@
+== Changelog ==
+
+= 2.4 04-Jul-2020 =
+* UPDATED portfolio post type overview table to output via abstract class
+* REMOVED plugin tracking capabilities
+
+
+= 2.3 05-Jul-2019 =
+* REMOVED duplicate project functionality
+* REMOVED custom oEmbed functionality
+* REMOVED extensions settings
+* REMOVED tracking settings
+
+
+= 2.2 23-Apr-2017 =
+* 
+
+
+= 2.1 05-Jul-2015 =
+* ADDED "Tools" section - Help debug current installation and migrate plugin-specific settings from one site to another
+
+
+= 2.0 01-Jul-2015 =
+* Complete rewrite
+
+
+= 1.0 07-Sep-2014 =
+* Initial release
