@@ -17,7 +17,7 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-echo maxson_project_data_term_categories( get_the_ID(), array( 
+echo maxson_project_get_categories( get_the_ID(), array( 
 	'link'      => false, 
 	'separator' => ' / ', 
 	'before'    => '<div class="entry-meta">', 

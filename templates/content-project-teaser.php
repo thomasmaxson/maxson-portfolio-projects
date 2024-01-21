@@ -41,7 +41,7 @@ if( ! defined( 'ABSPATH' ) )
 
 			do_action( 'maxson_portfolio_project_teaser_before_title' );
 
-			$headingTag = apply_filters( 'maxson_portfolio_projects_title_tag', 'h3' );
+			$headingTag = apply_filters( 'maxson_portfolio_project_title_tag', 'h3' );
 
 			the_title( "<$headingTag class=\"entry-title project-title\">", "</$headingTag>", true );
 

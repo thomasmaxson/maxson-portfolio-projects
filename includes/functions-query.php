@@ -93,26 +93,22 @@ if( ! function_exists( 'maxson_portfolio_query_args' ) )
 				{ 
 					$field = ( isset( $args["taxonomy_{$key}_field"] ) ) ? $args["taxonomy_{$key}_field"] : 'term_id';
 
-<<<<<<< Updated upstream
-					if( ! is_array( $args[ $key ] ) )
-						$args[ $key ] = array( $args[ $key ] );
-=======
 					if( ! is_array( $args[ "taxonomy_{$key}" ] ) )
-					{
+					{ 
 						$args[ "taxonomy_{$key}" ] = array( $args[ "taxonomy_{$key}" ] );
->>>>>>> Stashed changes
 
-					$tax_query = array( 
-						'taxonomy' => $taxonomy, 
-						'field'    => $field, 
-						'terms'    => $args[ "taxonomy_{$key}" ]
-					);
+						$tax_query = array( 
+							'taxonomy' => $taxonomy, 
+							'field'    => $field, 
+							'terms'    => $args[ "taxonomy_{$key}" ]
+						);
 
-					$args['tax_query'][] = $tax_query;
+						$args['tax_query'][] = $tax_query;
 
-					unset( $args[ "taxonomy_{$key}" ] );
-					unset( $args[ "{$key}_field" ] );
+						unset( $args[ "taxonomy_{$key}" ] );
+						unset( $args[ "{$key}_field" ] );
 
+					} // endif
 				} // endif
 			} // endforeach
 		} // endif
@@ -212,9 +208,7 @@ if( ! function_exists( 'maxson_portfolio_template_part' ) )
 if( ! function_exists( 'maxson_portfolio_template' ) )
 { 
 	/**
-	 * Get other templates (e.g. widget) passing attributes and including the file.
-	 * 
-	 * @param       string $template_name
+	 * Get other templates (e.g. widget) passing attributes and including the template_pathm       string $template_name
 	 * @param       array  $args          (optional)
 	 * @param       string $maxson_project_data_ (optional)
 	 * @param       string $default_path  (optional)

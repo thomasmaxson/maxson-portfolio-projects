@@ -32,11 +32,11 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Meta_Box_Project_Details' ) )
 		{ 
 			$post_id = $post->ID;
 
-			$meta_client     = maxson_project_data_client( $post_id );
-			$meta_url        = maxson_project_data_url( $post_id );
-			$meta_callout    = maxson_project_data_callout_label( $post_id );
-			$meta_start_date = maxson_project_data_start_date( $post_id, 'raw' );
-			$meta_end_date   = maxson_project_data_end_date( $post_id, 'raw' );
+			$meta_client     = maxson_project_get_client( $post_id );
+			$meta_url        = maxson_project_get_url( $post_id );
+			$meta_callout    = maxson_project_get_callout_label( $post_id );
+			$meta_start_date = maxson_project_get_start_date( $post_id, 'raw' );
+			$meta_end_date   = maxson_project_get_end_date( $post_id, 'raw' );
 
 			do_action( 'maxson_portfolio_meta_box_before_details', $post, $post->ID );
 

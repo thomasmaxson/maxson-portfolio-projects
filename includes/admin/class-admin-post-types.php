@@ -318,11 +318,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 		{ 
 			if( self::POST_TYPE === $screen->post_type && 'post' === $screen->base )
 			{ 
-<<<<<<< Updated upstream
 				$hidden = array_merge( $hidden, array( 'slugdiv', 'authordiv', 'postcustom', 'revisionsdiv', 'trackbacksdiv', ) );
-=======
-				$hidden = array_merge( $hidden, array( 'authordiv', 'postcustom', 'revisionsdiv', 'trackbacksdiv', ) );
->>>>>>> Stashed changes
 
 			} // endif
 

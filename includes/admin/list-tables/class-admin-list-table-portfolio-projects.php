@@ -152,14 +152,8 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 		$show_columns = array();
 
-<<<<<<< Updated upstream
-		$show_columns['cb']      = '<input type="checkbox" />';
-		$show_columns['thumb']   = __( 'Thumbnail', 'maxson' );
-		$show_columns['project'] = __( 'Project', 'maxson' );
-=======
 		$show_columns['cb']   = '<input type="checkbox" />';
 		$show_columns['name'] = __( 'Project', 'maxson' );
->>>>>>> Stashed changes
 
 		$show_columns['taxonomy-portfolio_type'] = _x( 'Type', 'Admin post column name', 'maxson' );
 		$show_columns['taxonomy-portfolio_role'] = _x( 'Roles', 'Admin post column name', 'maxson' );
@@ -189,27 +183,6 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 
 	/**
-<<<<<<< Updated upstream
-	 * Pre-fetch any data for the row each column has access to it
-	 * 
-	 * @param       int $post_id Post ID being shown
-	 */
-
-	protected function prepare_row_data( $post_id )
-	{ 
-		if( empty( $this->object ) || $this->object->get_id() !== $post_id )
-		{ 
-			$project = maxson_portfolio_get_project( $post_id );
-
-			$this->object = $project;
-
-		} // endif
-	}
-
-
-	/**
-=======
->>>>>>> Stashed changes
 	 * Render column: Name
 	 * 
 	 * @return      null
@@ -222,26 +195,6 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 		$post_edit_link = get_edit_post_link( $post_id );
 		$post_title     = _draft_or_post_title();
-
-<<<<<<< Updated upstream
-		// Project Type
-		if( taxonomy_exists( 'portfolio_type' ) &&
-			( true === apply_filters( 'maxson_portfolio_post_columns_show_project_type_as_icon', true ) ) )
-		{ 
-			$type_name = $project->get_type( 'name' );
-			$type_slug = $project->get_type( 'slug' );
-			$type_link = add_query_arg( array( 
-				'post_type' => $this->list_table_type, 
-				'taxonomy'  => 'portfolio_type', 
-				'term'      => $type_slug
-			), admin_url( 'edit.php' ) );
-
-			printf( '<a href="%1$s" class="post-state-format post-format-icon post-format-%2$s" data-tip="%3$s">%3$s:</a>', esc_url( $type_link ), $type_slug, $type_name );
-
-		} // endif
-
-=======
->>>>>>> Stashed changes
 
 		if( $parent_id > 0 && ( $archive_id !== $parent_id ) )
 		{ 
@@ -277,7 +230,7 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 			'before_end'   => sprintf( '<span class="project-end-date"><em>%1$s</em> ', _x( 'End: ', 'Post type column start date label', 'maxson' ) )
 		);
 
-		$date = maxson_project_data_start_end_date_html( $post_id, $date_args );
+		$date = maxson_project_get_start_end_date_html( $post_id, $date_args );
 
 		echo ( ! empty( $date ) ) ? $date : '<span class="na">&mdash;</span>';
 	}
@@ -322,8 +275,8 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 	protected function render_client_column( $post_id )
 	{ 
-		$text = maxson_project_data_client( $post_id );
-		$url  = maxson_project_data_url( $post_id );
+		$text = maxson_project_get_client( $post_id );
+		$url  = maxson_project_get_url( $post_id );
 
 		if( ! empty( $client ) && ! empty( $url ) )
 		{ 
@@ -355,11 +308,11 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 	protected function render_callout_column( $post_id )
 	{ 
-		$has_callout = maxson_project_data_has_callout( $post_id );
+		$has_callout = maxson_project_has_callout( $post_id );
 
 		if( $has_callout )
 		{ 
-			echo maxson_project_data_callout_label( $post_id );
+			echo maxson_project_get_callout_label( $post_id );
 
 		} else
 		{ 

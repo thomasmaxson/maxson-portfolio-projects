@@ -86,26 +86,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 		 * Add menu item
 		 */
 
-<<<<<<< Updated upstream
-		public static function settings_menu()
-		{ 
-			$capability = apply_filters( 'maxson_portfolio_settings_menu_capability', 'manage_portfolio_settings' );
-
-			if( current_user_can( 'manage_portfolio_settings' ) )
-			{ 
-				$settings_page = add_submenu_page( 'edit.php?post_type=' . self::POST_TYPE, __( 'Portfolio Settings', 'maxson' ), __( 'Settings', 'maxson' ), 
-					$capability, 'portfolio_settings', 'maxson_portfolio_settings_page' );
-
-			} // endif
-		}
-
-
-		/**
-		 * Add menu item
-		 */
-
-=======
->>>>>>> Stashed changes
 		public static function tools_menu()
 		{ 
 			$capability = apply_filters( 'maxson_portfolio_tools_menu_capability', 'manage_portfolio_tools' );

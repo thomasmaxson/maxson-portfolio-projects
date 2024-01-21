@@ -185,12 +185,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Frontend' ) )
 
 			$classes[] = apply_filters( 'maxson_portfolio_project_column_class', sanitize_html_class( "column-count-{$teaser_count}" ), $post_id );
 
-			$project_type = str_replace( '_', '-', maxson_project_data_type( $post_id, 'slug' ) );
+			$project_type = str_replace( '_', '-', maxson_project_get_type( $post_id, 'slug' ) );
 
 			$classes[] = sanitize_html_class( "project-type-{$project_type}" );
 
 
-			if( maxson_project_data_has_callout( $post_id ) )
+			if( maxson_project_has_callout( $post_id ) )
 			{ 
 				$classes[] = sanitize_html_class( 'project-has-callout' );
 

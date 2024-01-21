@@ -33,7 +33,7 @@ if( ! function_exists( 'portfolio_project_get_id' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_type' ) )
+if( ! function_exists( 'maxson_project_get_type' ) )
 { 
 	/**
 	 * Return the project type
@@ -43,7 +43,7 @@ if( ! function_exists( 'maxson_project_data_type' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_type( $post_id = null, $key = 'name', $args = array() )
+	function maxson_project_get_type( $post_id = null, $key = 'name', $args = array() )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -78,7 +78,7 @@ if( ! function_exists( 'maxson_project_data_type' ) )
 } // endif
 
 
-if( ! function_exists( 'portfolio_project_is_data_type' ) )
+if( ! function_exists( 'portfolio_project_is_type' ) )
 { 
 	/**
 	 * Checks the project type
@@ -88,14 +88,14 @@ if( ! function_exists( 'portfolio_project_is_data_type' ) )
 	 * @return      bool
 	 */
 
-	function portfolio_project_is_data_type( $post_id = null, $type = null, $key = 'slug' )
+	function portfolio_project_is_type( $post_id = null, $type = null, $key = 'slug' )
 	{ 
-		return ( maxson_project_data_type( $post_id, $key ) == $type ) ? true : false;
+		return ( maxson_project_get_type( $post_id, $key ) == $type ) ? true : false;
 	}
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_has_callout' ) )
+if( ! function_exists( 'maxson_project_has_callout' ) )
 { 
 	/**
 	 * Checks whether or not the project is callout
@@ -103,18 +103,18 @@ if( ! function_exists( 'maxson_project_data_has_callout' ) )
 	 * @return      bool
 	 */
 
-	function maxson_project_data_has_callout( $post_id = null, $true = true, $false = false )
+	function maxson_project_has_callout( $post_id = null, $true = true, $false = false )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
-		$meta = maxson_project_data_callout_label( $project_id );
+		$meta = maxson_project_get_callout_label( $project_id );
 
 		return ( '' !== $meta ) ? $true : $false;
 	}
 }
 
 
-if( ! function_exists( 'maxson_project_data_callout_label' ) )
+if( ! function_exists( 'maxson_project_get_callout_label' ) )
 { 
 	/**
 	 * Return the project callout label
@@ -122,7 +122,7 @@ if( ! function_exists( 'maxson_project_data_callout_label' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_callout_label( $post_id = null )
+	function maxson_project_get_callout_label( $post_id = null )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -133,7 +133,7 @@ if( ! function_exists( 'maxson_project_data_callout_label' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_client' ) )
+if( ! function_exists( 'maxson_project_get_client' ) )
 { 
 	/**
 	 * Return the project client
@@ -141,7 +141,7 @@ if( ! function_exists( 'maxson_project_data_client' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_client( $post_id = null )
+	function maxson_project_get_client( $post_id = null )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -152,7 +152,7 @@ if( ! function_exists( 'maxson_project_data_client' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_url' ) )
+if( ! function_exists( 'maxson_project_get_url' ) )
 { 
 	/**
 	 * Return the project url
@@ -160,7 +160,7 @@ if( ! function_exists( 'maxson_project_data_url' ) )
 	 * @return      string|bool
 	 */
 
-	function maxson_project_data_url( $post_id = null )
+	function maxson_project_get_url( $post_id = null )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -171,7 +171,7 @@ if( ! function_exists( 'maxson_project_data_url' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_start_end_date' ) )
+if( ! function_exists( 'maxson_project_get_start_end_date' ) )
 { 
 	/**
 	 * Return the project start or end date
@@ -182,7 +182,7 @@ if( ! function_exists( 'maxson_project_data_start_end_date' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_start_end_date( $type = null, $post_id = null, $format = null )
+	function maxson_project_get_start_end_date( $type = null, $post_id = null, $format = null )
 	{ 
 		$type = strtolower( $type );
 
@@ -240,7 +240,7 @@ if( ! function_exists( 'maxson_project_data_start_end_date' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_start_date' ) )
+if( ! function_exists( 'maxson_project_get_start_date' ) )
 { 
 	/**
 	 * Return the project start date
@@ -250,14 +250,14 @@ if( ! function_exists( 'maxson_project_data_start_date' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_start_date( $post_id = null, $format = null )
+	function maxson_project_get_start_date( $post_id = null, $format = null )
 	{ 
-		return maxson_project_data_start_end_date( 'start', $post_id, $format );
+		return maxson_project_get_start_end_date( 'start', $post_id, $format );
 	}
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_end_date' ) )
+if( ! function_exists( 'maxson_project_get_end_date' ) )
 { 
 	/**
 	 * Return the project end date
@@ -267,14 +267,14 @@ if( ! function_exists( 'maxson_project_data_end_date' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_end_date( $post_id = null, $format = null )
+	function maxson_project_get_end_date( $post_id = null, $format = null )
 	{ 
-		return maxson_project_data_start_end_date( 'end', $post_id, $format );
+		return maxson_project_get_start_end_date( 'end', $post_id, $format );
 	}
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_start_end_date_html' ) )
+if( ! function_exists( 'maxson_project_get_start_end_date_html' ) )
 { 
 	/**
 	 * Return the project  date
@@ -284,7 +284,7 @@ if( ! function_exists( 'maxson_project_data_start_end_date_html' ) )
 	 * @return      string
 	 */
 
-	function maxson_project_data_start_end_date_html( $post_id = null, $args = array() )
+	function maxson_project_get_start_end_date_html( $post_id = null, $args = array() )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -299,8 +299,8 @@ if( ! function_exists( 'maxson_project_data_start_end_date_html' ) )
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$start_date = maxson_project_data_start_date( $project_id, $args['format'] );
-		$end_date   = maxson_project_data_end_date( $project_id, $args['format'] );
+		$start_date = maxson_project_get_start_date( $project_id, $args['format'] );
+		$end_date   = maxson_project_get_end_date( $project_id, $args['format'] );
 
 		if( ! empty( $start_date ) && ! empty( $end_date ) )
 		{ 
@@ -327,16 +327,17 @@ if( ! function_exists( 'maxson_project_data_start_end_date_html' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_term_html' ) )
+if( ! function_exists( 'maxson_project_get_term_html' ) )
 { 
 	/**
 	 * Return the project taxonomy terms
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       array       $args (optional) An array of arguments
 	 * @return      string|bool
 	 */
 
-	function maxson_project_data_term_html( $post_id = null, $args = array() )
+	function maxson_project_get_term_html( $post_id = null, $args = array() )
 	{ 
 		$project_id = portfolio_project_get_id( $post_id );
 
@@ -402,38 +403,40 @@ if( ! function_exists( 'maxson_project_data_term_html' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_term_categories' ) )
+if( ! function_exists( 'maxson_project_get_categories' ) )
 { 
 	/**
 	 * Return the project categories
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       array  $args (optional) An array of arguments
 	 * @return      string
 	 */
 
-	function maxson_project_data_term_categories( $post_id = null, $args = array() )
+	function maxson_project_get_categories( $post_id = null, $args = array() )
 	{ 
 		$args['taxonomy'] = 'portfolio_category';
 
-		return maxson_project_data_term_html( $post_id, $args );
+		return maxson_project_get_term_html( $post_id, $args );
 	}
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_term_roles' ) )
+if( ! function_exists( 'maxson_project_get_roles' ) )
 { 
 	/**
 	 * Return the project tags
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       array  $args (optional) An array of arguments
 	 * @return      string|bool
 	 */
 
-	function maxson_project_data_term_roles( $post_id = null, $args = array() )
+	function maxson_project_get_roles( $post_id = null, $args = array() )
 	{ 
 		$args['taxonomy'] = 'portfolio_role';
 
-		return maxson_project_data_term_html( $post_id, $args );
+		return maxson_project_get_term_html( $post_id, $args );
 	}
 } // endif
 
@@ -443,29 +446,31 @@ if( ! function_exists( 'maxson_project_data_term_tags' ) )
 	/**
 	 * Return the project tags
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       array  $args (optional) An array of arguments
 	 * @return      string|bool
 	 */
 
-	function maxson_project_data_term_tags( $post_id = null, $args = array() )
+	function maxson_project_get_tags( $post_id = null, $args = array() )
 	{ 
 		$args['taxonomy'] = 'portfolio_tag';
 
-		return maxson_project_data_term_html( $post_id, $args );
+		return maxson_project_get_html( $post_id, $args );
 	}
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_taxonomy_terms' ) )
+if( ! function_exists( 'maxson_project_get_taxonomy_terms' ) )
 { 
 	/**
 	 * Retrieves related project terms
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       string $taxonomy (optional) Taxonomy name
 	 * @return      array
 	 */
 
-	function maxson_project_data_taxonomy_terms( $post_id = null, $taxonomy = 'portfolio_category', $key = 'term_id' )
+	function maxson_project_get_taxonomy_terms( $post_id = null, $taxonomy = 'portfolio_category', $key = 'term_id' )
 	{ 
 		if( ! taxonomy_exists( $taxonomy ) )
 		{
@@ -484,20 +489,21 @@ if( ! function_exists( 'maxson_project_data_taxonomy_terms' ) )
 } // endif
 
 
-if( ! function_exists( 'maxson_project_data_related_projects' ) )
+if( ! function_exists( 'maxson_project_get_related_projects' ) )
 { 
 	/**
 	 * Get and return related projects
 	 * 
+	 * @param       string $post_id (required) The ID of the post/project
 	 * @param       int    $limit    (optional) Number of posts to return
 	 * @param       array  $args     (optional) An array of arguments
 	 * @param       string $taxonomy (optional) Taxonomy name
 	 * @return      array  Array of post IDs
 	 */
 
-	function maxson_project_data_related_projects( $post_id = null, $limit = 5, $args = array(), $taxonomy = 'portfolio_category' )
+	function maxson_project_get_related_projects( $post_id = null, $limit = 5, $args = array(), $taxonomy = 'portfolio_category' )
 	{ 
-		$project_id = portfolio_project_get_id( $project_id );
+		$project_id = portfolio_project_get_id( $post_id );
 
 		$transient_name     = "maxson_portfolio_related_{$project_id}_{$taxonomy}_{$limit}";
 		$transient_duration = apply_filters( 'maxson_portfolio_related_projects_transient_duration', ( DAY_IN_SECONDS * 30 ), $taxonomy, $project_id );
@@ -505,7 +511,8 @@ if( ! function_exists( 'maxson_project_data_related_projects' ) )
 		if( false === ( $related_posts = get_transient( $transient_name ) ) )
 		{ 
 			// Related projects are found from category, role, tag or type
-			$terms = maxson_project_data_taxonomy_terms( $project_id, $taxonomy, 'term_id' );
+			$terms = maxson_project_get_taxonomy_terms
+			( $project_id, $taxonomy, 'term_id' );
 
 			// Don't bother if none are set
 			if( sizeof( $terms ) == 1 )

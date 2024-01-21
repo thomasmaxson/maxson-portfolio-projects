@@ -36,10 +36,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Post_Types' ) )
 			add_action( 'init', array( &$this, 'register' ) );
 
 			add_action( 'init', array( &$this, 'support_jetpack_omnisearch' ) );
-<<<<<<< Updated upstream
-			add_filter( 'rest_api_allowed_post_types', array( &$this, 'rest_api_allowed_post_types' ) );
-=======
->>>>>>> Stashed changes
 		}
 
 
