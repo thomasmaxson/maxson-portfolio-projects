@@ -17,9 +17,12 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
+global $post;
 
-?>
-<div class="entry-thumbnail">
-	<?php echo $project->get_thumbnail( 'project_thumbnail' ); ?>
-</div>
+if( has_post_thumbnail() )
+{ ?>
+	<div class="entry-thumbnail">
+		<?php echo get_the_post_thumbnail( $post, 'project_thumbnail' ); ?>
+	</div>
+
+<?php } // endif ?>

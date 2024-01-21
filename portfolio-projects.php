@@ -4,7 +4,7 @@
  * Description: The easiest way to manage you Portfolio Projects with WordPress. Manage, edit, and create new portfolio projects. Display your portfolio projects using widgets and template tags.
  * Tags: maxson, portfolio projects, portfolio, projects, custom post type, custom taxonomy, images, custom fields
  * Author: Thomas Maxson
- * Version: 2.4.0
+ * Version: 3.0.0
  * Author URI: http://thomasmaxson.com/
  * Text Domain: maxson
  * Domain Path: /languages/
@@ -17,7 +17,7 @@
  * @license     GPL-2.0+
  * @version		1.0
  * 
- * Copyright 2008-2019 Thomas Maxson (email: hello at thomasmaxson dot com)
+ * Copyright 2008-2024 Thomas Maxson (email: hello at thomasmaxson dot com)
  * 
  * Maxson Portfolio Projects ("Projects") is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or any later version.
  * 
@@ -160,8 +160,6 @@ final class Maxson_Portfolio_Projects
 
 		register_activation_hook( __FILE__, array( 'Maxson_Portfolio_Projects_Install', 'install' ) );
 		register_deactivation_hook( __FILE__, array( 'Maxson_Portfolio_Projects_Install', 'uninstall' ) );
-
-		add_action( 'init', array( &$this, 'init' ), 0 );
 	}
 
 
@@ -195,10 +193,6 @@ final class Maxson_Portfolio_Projects
 		// Moved to Status Page
 	//	define( 'MAXSON_PORTFOLIO_DEBUG', false );
 	//	define( 'MAXSON_PORTFOLIO_DEBUG_TEMPLATE', false );
-
-		// Deprecated
-	//	define( 'MAXSON_PORTFOLIO_LOAD_CSS', true );
-	//	define( 'MAXSON_PORTFOLIO_LOAD_JS', true );
 	}
 
 
@@ -230,54 +224,38 @@ final class Maxson_Portfolio_Projects
 	{ 
 		$includes_folder  = MAXSON_PORTFOLIO_INCLUDES;
 		$admin_folder     = MAXSON_PORTFOLIO_INCLUDES_ADMIN;
-	//	$blocks_folder    = MAXSON_PORTFOLIO_INCLUDES_BLOCKS;
+		$blocks_folder    = MAXSON_PORTFOLIO_INCLUDES_BLOCKS;
 		$metaboxes_folder = $admin_folder . trailingslashit( 'meta-boxes' );
 
 		// Functions
 		include_once( "{$includes_folder}functions-core.php"        );
 		include_once( "{$includes_folder}functions-conditional.php" );
-		include_once( "{$includes_folder}functions-deprecated.php"  );
+		include_once( "{$includes_folder}functions-meta.php"        );
 		include_once( "{$includes_folder}functions-media.php"       );
 		include_once( "{$includes_folder}functions-term.php"        );
 		include_once( "{$includes_folder}functions-query.php"       );
 
 		// Walkers
-		include_once( "{$includes_folder}walkers/class-cat-dropdown-walker.php" );
-		include_once( "{$includes_folder}walkers/class-cat-list-walker.php"     );
+		include_once( "{$includes_folder}walkers/class-portfolio-grid-filter-list-walker.php"     );
+		include_once( "{$includes_folder}walkers/class-portfolio-grid-filter-dropdown-walker.php" );
 
 		// Classes
-		include_once( "{$includes_folder}class-install.php"           );
-		include_once( "{$includes_folder}class-meta.php"              );
-		include_once( "{$includes_folder}class-media.php"             );
-		include_once( "{$includes_folder}class-permalinks.php"        );
-		include_once( "{$includes_folder}class-post-types.php"        );
-		include_once( "{$includes_folder}class-query.php"             );
-	//	include_once( "{$includes_folder}class-rest.php"              );
-		include_once( "{$includes_folder}class-taxonomies.php"        );
-		include_once( "{$includes_folder}class-template-loader.php"   );
-		include_once( "{$includes_folder}class-widgets.php"           );
+		include_once( "{$includes_folder}class-assets.php"     );
+		include_once( "{$includes_folder}class-install.php"    );
+	//	include_once( "{$includes_folder}class-meta.php"       );
+		include_once( "{$includes_folder}class-media.php"      );
+		include_once( "{$includes_folder}class-permalinks.php" );
+		include_once( "{$includes_folder}class-post-types.php" );
+		include_once( "{$includes_folder}class-taxonomies.php" );
 
 		// Blocks
-	//	if( function_exists( 'gutenberg_init' ) && 
-	//		function_exists( 'register_block_type' ) )
-	//	{ 
-	//		include_once( "{$blocks_folder}class-blocks.php"          );
-	//		include_once( "{$blocks_folder}archive/index.php"         );
-
-	//	} // endif
+		include_once( "{$blocks_folder}class-blocks.php"     );
+		include_once( "{$blocks_folder}portfolio/block.php"  );
 
 		// Admin Functions
-		include_once( "{$admin_folder}functions-admin.php"            );
-		include_once( "{$admin_folder}functions-admin-hooks.php"      );
-		include_once( "{$admin_folder}functions-admin-settings.php"   );
-		include_once( "{$admin_folder}functions-admin-tools.php"      );
-
-		// Project Factory
-		include_once( "{$includes_folder}class-project-factory.php"   );
-		include_once( "{$includes_folder}class-project.php"           );
-			include_once( "{$includes_folder}class-project-audio.php"     );
-			include_once( "{$includes_folder}class-project-gallery.php"   );
-			include_once( "{$includes_folder}class-project-video.php"     );
+		include_once( "{$admin_folder}functions-admin.php"       );
+		include_once( "{$admin_folder}functions-admin-hooks.php" );
+		include_once( "{$admin_folder}functions-admin-tools.php" );
 
 		//  Do not conditionally load Customizer code with an is_admin() check
 		include_once( "{$includes_folder}admin/class-admin-customize.php"  );
@@ -287,22 +265,10 @@ final class Maxson_Portfolio_Projects
 		{ 
 			// Template
 			include_once( "{$includes_folder}template-functions.php" );
-		//	include_once( "{$includes_folder}template-hooks.php"     );
+			include_once( "{$includes_folder}template-hooks.php"     );
 
 			include_once( "{$includes_folder}class-frontend.php" );
 			include_once( "{$includes_folder}class-ssl.php"      );
-
-		//	if( $this->is_active_theme( 'twentyseventeen' ) )
-		//	{ 
-		//		include_once( 'includes/theme-support/class-twentyseventeen.php' );
-
-		//	} // endif
-		} // endif
-
-
-		if( $this->is_request( 'ajax' ) )
-		{ 
-			include_once( "{$admin_folder}class-admin-ajax.php" );
 
 		} // endif
 
@@ -311,29 +277,18 @@ final class Maxson_Portfolio_Projects
 		{ 
 			include_once( "{$admin_folder}class-admin.php"                 );
 			include_once( "{$admin_folder}class-admin-assets.php"          );
-			include_once( "{$admin_folder}class-admin-contextual-help.php" );
 			include_once( "{$admin_folder}class-admin-media.php"           );
-			include_once( "{$admin_folder}class-admin-menus.php"           );
 			include_once( "{$admin_folder}class-admin-meta-boxes.php"      );
+			include_once( "{$admin_folder}class-admin-menus.php"           );
 			include_once( "{$admin_folder}class-admin-notices.php"         );
 			include_once( "{$admin_folder}class-admin-permalinks.php"      );
 			include_once( "{$admin_folder}class-admin-pointers.php"        );
 			include_once( "{$admin_folder}class-admin-post-types.php"      );
-			include_once( "{$admin_folder}class-admin-settings.php"        );
 			include_once( "{$admin_folder}class-admin-taxonomies.php"      );
 			include_once( "{$admin_folder}class-admin-tools.php"           );
 			include_once( "{$admin_folder}class-admin-users.php"           );
 
-			// Meta Boxes
-			include_once( "{$metaboxes_folder}class-post-meta-box-project-details.php"  );
-			include_once( "{$metaboxes_folder}class-post-meta-box-project-excerpt.php"  );
-			include_once( "{$metaboxes_folder}class-post-meta-box-project-media.php"    );
-			include_once( "{$metaboxes_folder}class-post-meta-box-project-promoted.php" );
-
-			// Meta Boxes, Media Specific
-			include_once( "{$metaboxes_folder}media/class-meta-box-project-audio.php"   );
-			include_once( "{$metaboxes_folder}media/class-meta-box-project-gallery.php" );
-			include_once( "{$metaboxes_folder}media/class-meta-box-project-video.php"   );
+			include_once( "{$metaboxes_folder}class-post-meta-box-project-details.php" );
 
 		} // endif
 	}
@@ -358,24 +313,6 @@ final class Maxson_Portfolio_Projects
 				break;
 
 		} // endswitch
-	}
-
-
-	/**
-	 * Init Packages when WordPress Initializes
-	 * 
-	 * @return      void
-	 */
-
-	public function init()
-	{ 
-		do_action( 'maxson_portfolio_before_init' );
-
-		// Load class instances
-		$this->project_factory = new Maxson_Portfolio_Projects_Factory();
-
-		// Init action
-		do_action( 'maxson_portfolio_init' );
 	}
 
 
@@ -411,7 +348,7 @@ final class Maxson_Portfolio_Projects
 
 	public function template_path()
 	{ 
-		return apply_filters( 'maxson_portfolio_template_path', 'portfolio' );
+		return apply_filters( 'maxson_portfolio_template_path', 'portfolio-projects' );
 	}
 
 
@@ -441,5 +378,29 @@ function Portfolio_Projects()
 }
 
 Portfolio_Projects();
+
+
+
+
+
+
+
+
+/**
+ * Set "Image" as the default value for Project Type taxonomy
+ */
+
+function maxson_portfolio_acf_project_type_set_default_value( $value, $post_id, $field )
+{ 
+	if( $value === false && get_post_status( $post_id ) == 'auto-draft' )
+	{ 
+		// Project Type: Image term ID
+		$value = array( 293 );
+
+	} // endif
+
+	return $value;
+}
+//add_filter( 'acf/load_value/key=field_5f8af2d6c0dd3', 'maxson_portfolio_acf_project_type_set_default_value', 20, 3 );
 
 ?>

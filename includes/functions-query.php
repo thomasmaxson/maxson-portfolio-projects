@@ -16,51 +16,6 @@ if( ! defined( 'ABSPATH' ) )
 } // endif
 
 
-/**
- * When the_post is called, put project data into global var
- *
- * @param       mixed $post
- * @return      Project data
- */
-
-function maxson_portfolio_setup_settings_project_data( $post_object )
-{ 
-	unset( $GLOBALS['project'] );
-
-	if( is_int( $post_object ) )
-	{
-		$post_object = get_post( $post_object );
-
-	} // endif
-
-	if( empty( $post_object->post_type ) || 
-		! in_array( $post_object->post_type, array( 'portfolio_project' ) ) )
-	{ 
-		return;
-
-	} // endif
-
-	$GLOBALS['project'] = maxson_portfolio_get_project( $post_object );
-
-	return $GLOBALS['project'];
-}
-add_action( 'the_post', 'maxson_portfolio_setup_settings_project_data' );
-
-
-/**
- * Main function for returning projects, uses the Maxson_Portfolio_Projects_Factory class
- * 
- * @param       mixed $the_project Post object or post ID of the package
- * @param       array $args        Contains all arguments to be used to get this product
- * @return      BGP_Package
- */
-
-function maxson_portfolio_get_project( $the_project = false, $args = array() )
-{ 
-	return Portfolio_Projects()->project_factory->get_project( $the_project, $args );
-}
-
-
 if( ! function_exists( 'maxson_portfolio_query_args' ) )
 { 
 	/**
@@ -76,9 +31,9 @@ if( ! function_exists( 'maxson_portfolio_query_args' ) )
 	{ 
 		$defaults = array( 
 			'post_status'    => array( 'publish' ), 
-			'posts_per_page' => maxson_portfolio_get_archive_limit(), 
-			'orderby'        => maxson_portfolio_get_option( 'archive_orderby', 'DESC' ), 
-			'order'          => maxson_portfolio_get_option( 'archive_order', 'post_date' ), 
+		//	'posts_per_page' => maxson_portfolio_get_archive_limit(), 
+		//	'orderby'        => maxson_portfolio_get_option( 'archive_orderby', 'DESC' ), 
+		//	'order'          => maxson_portfolio_get_option( 'archive_order', 'post_date' ), 
 		//	'meta_query'     => array(), 
 		//	'tax_query'      => array()
 		);
@@ -132,42 +87,47 @@ if( ! function_exists( 'maxson_portfolio_query_args' ) )
 
 		if( ! empty( $taxonomies ) )
 		{ 
-			foreach( $taxonomies as $key => $label )
+			foreach( $taxonomies as $key => $taxonomy )
 			{ 
-				if( isset( $args[ $key ] ) && ! empty( $args[ $key ] ) )
+				if( isset( $args[ "taxonomy_{$key}" ] ) && ! empty( $args[ "taxonomy_{$key}" ] ) )
 				{ 
-					$taxonomy = "portfolio_{$key}";
-					$field = ( isset( $args["{$key}_field"] ) ) ? $args["{$key}_field"] : 'slug';
+					$field = ( isset( $args["taxonomy_{$key}_field"] ) ) ? $args["taxonomy_{$key}_field"] : 'term_id';
 
+<<<<<<< Updated upstream
 					if( ! is_array( $args[ $key ] ) )
 						$args[ $key ] = array( $args[ $key ] );
+=======
+					if( ! is_array( $args[ "taxonomy_{$key}" ] ) )
+					{
+						$args[ "taxonomy_{$key}" ] = array( $args[ "taxonomy_{$key}" ] );
+>>>>>>> Stashed changes
 
 					$tax_query = array( 
 						'taxonomy' => $taxonomy, 
 						'field'    => $field, 
-						'terms'    => $args[ $key ]
+						'terms'    => $args[ "taxonomy_{$key}" ]
 					);
 
 					$args['tax_query'][] = $tax_query;
 
-					unset( $args[ $key ] );
+					unset( $args[ "taxonomy_{$key}" ] );
+					unset( $args[ "{$key}_field" ] );
 
 				} // endif
 			} // endforeach
 		} // endif
 
 
-		if( isset( $args['promoted'] ) && 
-			true == filter_var( $args['promoted'], FILTER_VALIDATE_BOOLEAN ) )
+		if( isset( $args['callout'] ) )
 		{ 
 			$meta_query = array( 
-				'key' 	=> '_project_promoted', 
-				'value' => true
+				'key'     => '_callout', 
+				'compare' => 'EXISTS'
 			);
 
 			$args['meta_query'][] = $meta_query;
 
-			unset( $args['promoted'] );
+			unset( $args['callout'] );
 
 		} // endif
 
@@ -256,7 +216,7 @@ if( ! function_exists( 'maxson_portfolio_template' ) )
 	 * 
 	 * @param       string $template_name
 	 * @param       array  $args          (optional)
-	 * @param       string $template_path (optional)
+	 * @param       string $maxson_project_data_ (optional)
 	 * @param       string $default_path  (optional)
 	 * @return      void
 	 */

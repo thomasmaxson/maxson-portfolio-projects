@@ -1,0 +1,19 @@
+{
+  "name": "maxson-portfolio-blocks",
+  "author": "Thomas Maxson",
+  "version": "1.0.0",
+  "description": "Maxson Portfolio Projects plugin blocks",
+  "license": "GPL-2.0-or-later",
+  "main": "index.js",
+  "scripts": { 
+    "start": "wp-scripts start --webpack-src-dir=src/ --output-path=build/",
+    "build": "wp-scripts build --webpack-src-dir=src/ --output-path=build/",
+    "start:archive": "wp-scripts start --webpack-src-dir=src/archive/ --output-path=build/archive/",
+    "build:archive": "wp-scripts build --webpack-src-dir=src/archive/ --output-path=build/archive/",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "package-update": "wp-scripts package-update",
+    "plugin-zip": "wp-scripts plugin-zip"
+  }
+}

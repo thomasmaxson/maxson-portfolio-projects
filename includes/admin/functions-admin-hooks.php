@@ -17,7 +17,7 @@ if( ! defined( 'ABSPATH' ) )
 
 
 /**
- * Reset plugin capabilities
+ * Reset plugin data
  * 
  * @return      void
  */
@@ -32,16 +32,6 @@ function maxson_portfolio_process_tools()
 	{ 
 		switch( $_GET['maxson_portfolio_action'] )
 		{ 
-			case 'reset_capabilities': 
-				Maxson_Portfolio_Projects_Install::remove_capabilities();
-				Maxson_Portfolio_Projects_Install::create_capabilities();
-
-				$message = __( 'Plugin-specific capabilities have been reset.', 'maxson' );
-
-				Maxson_Portfolio_Projects_Admin_Notices::add_success( 'reset_plugin_capabilities', $message, true );
-				break;
-
-
 			case 'install_pages': 
 				$pages = array( 
 					'archive' => array( 
@@ -145,7 +135,6 @@ function maxson_portfolio_process_tools()
 	exit;
 }
 add_action( 'maxson_portfolio_reset_pointers',            'maxson_portfolio_process_tools' );
-add_action( 'maxson_portfolio_reset_capabilities',        'maxson_portfolio_process_tools' );
 add_action( 'maxson_portfolio_install_pages',             'maxson_portfolio_process_tools' );
 add_action( 'maxson_portfolio_skip_install_pages',        'maxson_portfolio_process_tools' );
 add_action( 'maxson_portfolio_delete_transients',         'maxson_portfolio_process_tools' );
@@ -215,20 +204,6 @@ function maxson_portfolio_process_settings_export()
 			'permalink_role', 
 			'permalink_tag', 
 			'permalink_type', 
-
-			// Archive (Portfolio)
-			'archive_page_id', 
-			'archive_limit', 
-			'archive_order', 
-			'archive_orderby', 
-			'archive_thumbnail', 
-
-			// Setup
-			'setup_promoted', 
-			'setup_taxonomy_category', 
-			'setup_taxonomy_role', 
-			'setup_taxonomy_tag', 
-			'setup_taxonomy_type'
 		);
 
 		$settings = array();
@@ -293,7 +268,9 @@ function maxson_portfolio_process_settings_import()
 
 		} // endforeach
 
-		Maxson_Portfolio_Projects_Admin_Notices::add_success( 'import_success', __( 'Settings have been imported', 'maxson' ), true );
+		$message = __( 'Settings have been imported', 'maxson' );
+
+		Maxson_Portfolio_Projects_Admin_Notices::add_success( 'import_success', $message, true );
 
 	} // endif
 

@@ -93,7 +93,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Assets' ) )
 
 		//	wp_register_script( 'maxson-portfolio-edit-image',      plugins_url( "/admin/js/portfolio-projects-admin-edit-image.js", $plugin_file ), array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'maxson-portfolio-chosen', 'maxson-portfolio-tiptip' ), $plugin_version, true );
 
-			if( in_array( $screen->id, maxson_portfolio_get_admin_screen_ids() ) )
+			/*if( in_array( $screen->id, maxson_portfolio_get_admin_screen_ids() ) )
 			{ 
 				if( function_exists( 'wp_enqueue_media' ) )
 				{ 
@@ -114,7 +114,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Assets' ) )
 				wp_enqueue_script( 'maxson-portfolio-chosen' );
 				wp_enqueue_script( 'maxson-portfolio-tiptip' );
 				wp_enqueue_script( 'maxson-portfolio-admin' );
-			//	wp_enqueue_script( 'maxson-portfolio-edit-image' );
+				//	wp_enqueue_script( 'maxson-portfolio-edit-image' );
 
 
 				$chosen_params = apply_filters( 'maxson_portfolio_admin_params', array( 
@@ -160,7 +160,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Assets' ) )
 
 				wp_localize_script( 'maxson-portfolio-admin', 'maxson_portfolio_admin_params', $admin_params );
 
-			} // endif
+			} // endif*/
 		}
 
 

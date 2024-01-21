@@ -36,37 +36,18 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 		{ 
 			$post_type = self::POST_TYPE;
 
-			// Load correct list table classes for current screen
-			add_action( 'current_screen', array( &$this, 'setup_screen' ) );
-			add_action( 'check_ajax_referer', array( &$this, 'setup_screen' ) );
+			// Load correct list table classes for current screen.
+			add_action( 'current_screen', array( $this, 'setup_screen' ) );
+			add_action( 'check_ajax_referer', array( $this, 'setup_screen' ) );
 
-			// Admin notices
+			add_filter( 'display_post_states', array( &$this, 'display_post_states' ), 10, 2 );
+
 			add_filter( 'post_updated_messages', array( &$this, 'post_updated_messages' ) );
-			add_filter( 'bulk_post_updated_messages', array( &$this, 'bulk_post_updated_messages' ), 10, 2 );
-
-			// Extra post data and screen elements
+			add_filter( 'bulk_post_updated_messages', array( &$this, 'bulk_updated_messages' ), 10, 2 );
 			add_filter( 'enter_title_here', array( &$this, 'enter_title_here' ), 10, 2 );
+			add_filter( 'hidden_meta_boxes', array( &$this, 'hidden_meta_boxes' ), 10, 2 );
 
-			// Hide Meta Boxes
-			// Permanent View Hide
-		//	add_filter( 'hidden_meta_boxes', array( &$this, 'hidden_meta_boxes' ), 10, 2 );
-			// Default View Hide
-			add_filter( 'default_hidden_meta_boxes', array( &$this, 'hidden_meta_boxes' ), 10, 2 );
-
-			// Show archive notice
-			add_action( 'edit_form_top', array( &$this, 'show_portfolio_archive_notice' ) );
-
-			// Add a post display state for special pages
-			add_filter( 'display_post_states', array( &$this, 'add_display_post_states' ), 10, 2 );
-
-			// Bulk / quick edit
-			add_filter( 'bulk_actions-edit-portfolio_project', array( &$this, 'bulk_actions' ) );
-			add_action( 'quick_edit_custom_box', array( &$this, 'quick_edit' ), 10, 2 );
-
-
-
-			add_action( 'pre_get_posts', array( &$this, 'column_orderby' ) );
-			add_filter( 'media_view_strings', array( &$this, 'modify_media_strings' ) );
+			// add_filter( 'media_view_strings', array( &$this, 'modify_media_strings' ) );
 		}
 
 
@@ -88,7 +69,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 
 		public function setup_screen()
 		{ 
-			global $maxson_pp_list_table;
+			global $portfolio_projects_list_table;
 
 			$screen_id = false;
 
@@ -113,13 +94,130 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 				case 'edit-portfolio_project': 
 					include_once( 'list-tables/class-admin-list-table-portfolio-projects.php' );
 
-					$maxson_pp_list_table = new Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects();
+					$portfolio_projects_list_table = new Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects();
 					break;
 			}
 
 			// Ensure the table handler is only loaded once. Prevents multiple loads if a plugin calls check_ajax_referer many times
 			remove_action( 'current_screen', array( $this, 'setup_screen' ) );
 			remove_action( 'check_ajax_referer', array( $this, 'setup_screen' ) );
+		}
+
+
+		/**
+		 * Render row actions for older version of WordPress - since WordPress 4.3 we don't have to build the row actions
+		 * 
+		 * @param       WP_Post $post
+		 * @return      void
+		 */
+
+		private function render_row_actions( $post, $title )
+		{ 
+			global $wp_version;
+
+			if( version_compare( $wp_version, '4.3-beta', '>=' ) )
+			{ 
+				return;
+
+			} // endif
+
+			$actions = array();
+
+			$post_type_object = get_post_type_object( $post->post_type );
+
+			$edit_link    = get_edit_post_link( $post->ID );
+			$trash_link   = get_delete_post_link( $post->ID );
+			$delete_link  = get_delete_post_link( $post->ID, '', true );
+
+			$edit_post    = current_user_can( $post_type_object->cap->edit_post, $post->ID );
+			$delete_post  = current_user_can( $post_type_object->cap->delete_post, $post->ID );
+
+			if( $edit_post && 'trash' != $post->post_status )
+			{ 
+				$actions['edit'] = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', get_edit_post_link( $post->ID, true ), esc_attr( __( 'Edit this item', 'maxson' ) ), __( 'Edit', 'maxson' ) );
+
+				$actions['inline hide-if-no-js'] = sprintf( '<a href="#" class="editinline" title="%1$s">%2$s</a>', esc_attr( __( 'Edit this item inline', 'maxson' ) ), __( 'Quick&nbsp;Edit', 'maxson' ) );
+
+			} // endif
+
+
+			if( $delete_post )
+			{ 
+				if( 'trash' == $post->post_status )
+				{  
+					$untrash_href = wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID );
+
+					$actions['untrash'] = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', $untrash_href, esc_attr( __( 'Restore this item from the Trash', 'maxson' ) ), __( 'Restore', 'maxson' ) );
+
+				} elseif( EMPTY_TRASH_DAYS )
+				{ 
+					$actions['trash'] = sprintf( '<a href="%1$s" title="%2$s" class="submitdelete">%3$s</a>', get_delete_post_link( $post->ID ), esc_attr( __( 'Move this item to the Trash', 'maxson' ) ), __( 'Trash', 'maxson' ) );
+
+				} // endif
+
+				if( 'trash' == $post->post_status || ! EMPTY_TRASH_DAYS )
+				{ 
+					$actions['delete'] = sprintf( '<a href="%1$s" title="%2$s" class="submitdelete">%3$s</a>', get_delete_post_link( $post->ID, '', true ), esc_attr( __( 'Delete this item permanently', 'maxson' ) ), __( 'Delete Permanently', 'maxson' ) );
+
+				} // endif
+			} // endif
+
+			if( $post_type_object->public )
+			{ 
+				if( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) )
+				{ 
+					if( $edit_post )
+					{ 
+						$preview_href = add_query_arg( 'preview', 'true', get_permalink( $post->ID ) );
+
+						$actions['view'] = sprintf( '<a href="%1$s" title="%2$s" rel="permalink" target="_blank">%3$s</a>', esc_url( $preview_href ), esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'maxson' ), $title ) ), __( 'Preview', 'maxson' ) );
+
+					} // endif
+				} elseif( 'trash' != $post->post_status )
+				{ 
+					$actions['view'] = sprintf( '<a href="%1$s" title="%2$s" rel="permalink" target="_blank">%3$s</a>', get_permalink( $post->ID ), esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'maxson' ), $title ) ), __( 'View', 'maxson' ) );
+
+				} // endif
+			} // endif
+
+
+			$actions = apply_filters( 'post_row_actions', $actions, $post );
+
+			echo '<div class="row-actions">';
+
+			$i = 0;
+			$action_count = sizeof( $actions );
+
+			foreach( $actions as $action => $link )
+			{ 
+				++$i;
+				$sep = ( $i == $action_count ) ? '' : ' | ';
+
+				echo '<span class="' . $action . '">' . $link . $sep . '</span>';
+
+			} // endforeach
+
+			echo '</div>';
+		}
+
+
+		/**
+		 * Display states used in the posts list table
+		 * 
+		 * @param       array   $post_states An array of post display states
+	 	 * @param       WP_Post $post        The current post object
+	 	 * @return      string
+		 */
+
+		public function display_post_states( $post_states, $post )
+		{ 
+			if( maxson_portfolio_is_archive_page( $post->ID ) )
+			{ 
+				$post_states['archive_for_portfolio_projects'] = _x( 'Portfolio Projects', 'Label for Portfolio Archive page', 'maxson' );
+
+			} // endif
+
+			return $post_states;
 		}
 
 
@@ -174,7 +272,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 		 * @return      array
 		 */
 
-		public function bulk_post_updated_messages( $bulk_messages, $bulk_counts )
+		public function bulk_updated_messages( $bulk_messages, $bulk_counts )
 		{ 
 			$bulk_messages[self::POST_TYPE] = array( 
 				'updated'   => _n( '%s project updated.', '%s projects updated.', $bulk_counts['updated'], 'maxson' ), 
@@ -220,134 +318,15 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 		{ 
 			if( self::POST_TYPE === $screen->post_type && 'post' === $screen->base )
 			{ 
+<<<<<<< Updated upstream
 				$hidden = array_merge( $hidden, array( 'slugdiv', 'authordiv', 'postcustom', 'revisionsdiv', 'trackbacksdiv', ) );
+=======
+				$hidden = array_merge( $hidden, array( 'authordiv', 'postcustom', 'revisionsdiv', 'trackbacksdiv', ) );
+>>>>>>> Stashed changes
 
 			} // endif
 
 			return $hidden;
-		}
-
-
-		/**
-		 * Show a notice above the CPT archive
-		 *
-		 * @param WP_Post $post The current post object.
-		 */
-
-		public function show_portfolio_archive_notice( $post )
-		{ 
-			if( $post && maxson_portfolio_is_archive_page( $post->ID ) )
-			{ 
-				echo '<div class="notice notice-info">';
-				echo '<p>' . wp_kses_post( __( 'This is the Portfolio Projects Archive page. This page is a special archive that lists your Portfolio Projects.', 'maxson' ) ) . '</p>';
-				echo '</div>';
-
-			} // endif
-		}
-
-
-		/**
-		 * Add a post display state for specific pages in the page list table
-		 * 
-		 * @param       array   $post_states An array of post display states
-		 * @param       WP_Post $post        The current post object
-		 * @return 		array
-		 */
-
-		public function add_display_post_states( $post_states, $post )
-		{ 
-			if( maxson_portfolio_is_archive_page( $post->ID ) )
-			{ 
-				$post_states['maxson_portfolio_page_for_archive'] = __( 'Portfolio Projects Archive', 'maxson' );
-
-			} // endif
-
-			return $post_states;
-		}
-
-
-		/**
-		 * Remove edit from the bulk actions.
-		 * 
-		 * @param       array $actions
-		 * @return 		array
-		 */
-
-		public function bulk_actions( $actions )
-		{ 
-			if( isset( $actions['edit'] ) )
-			{ 
-				unset( $actions['edit'] );
-
-			} // endif
-
-			return $actions;
-		}
-
-
-		/**
-		 * Custom quick edit
-		 * 
-		 * @param       mixed $column_name
-		 * @param       mixed $post_type
-		 * @return 		void
-		 */
-
-		public function quick_edit( $column_name, $post_type )
-		{ 
-			if( self::POST_TYPE == $post_type )
-			{ 
-				switch( $column_name )
-				{ 
-					case 'promoted': 
-						include( MAXSON_PORTFOLIO_DIRNAME . '/includes/admin/views/html-quick-edit-promoted.php' );
-						break;
-
-					default: 
-						return false;
-						break;
-
-				} // endswitch
-			} // endif
-		}
-
-
-		/**
-		 * Setup data for custom column query 
-		 * 
-		 * @param       string $query
-		 * @return      void
-		 */
-
-		public function column_orderby( $query )
-		{ 
-			if( is_admin() )
-			{ 
-				$orderby = $query->get( 'orderby' );
-
-				switch( $orderby )
-				{ 
-					case 'project_promoted': 
-						// reverse display order - it's backwards from what you'd expect it to be.
-						$order = ( 'DESC' == strtoupper( $query->get( 'order' ) ) ) ? 'ASC' : 'DESC';
-
-						$query->set( 'orderby', 'meta_value' );
-						$query->set( 'order', $order );
-						$query->set( 'meta_query', array( 
-							'relation' => 'OR', 
-							'project_promoted_no_meta' => array( 
-								'key'     => '_promoted', 
-								'compare' => 'NOT EXISTS'
-							), 
-							'project_promoted_has_meta' => array( 
-								'key'     => '_promoted', 
-								'compare' => 'EXISTS'
-							)
-						) );
-						break;
-
-				} // endswitch
-			} // endif
 		}
 
 
@@ -370,7 +349,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Post_Types' ) )
 				$strings['insertIntoPost']        = sprintf( __( 'Insert into %1$s', 'maxson' ), $name );
 				$strings['uploadedToThisPost']    = sprintf( __( 'Uploaded to this %1$s', 'maxson' ), $name );
 				$strings['setFeaturedImageTitle'] = sprintf( __( 'Set Featured %1$s Image', 'maxson' ), $name );
-				$strings['setFeaturedImage']      = sprintf( __( 'Set promoted %1$s image', 'maxson' ), strtolower( $name ) );
+				$strings['setFeaturedImage']      = sprintf( __( 'Set Featured %1$s image', 'maxson' ), strtolower( $name ) );
 
 			} // endif
 

@@ -62,20 +62,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Frontend' ) )
 				wp_safe_redirect( get_post_type_archive_link( self::POST_TYPE ) );
 				exit();
 
-			// Redirect to the project page if we have a single project
-		//	} elseif( ( is_search() || is_post_type_archive( self::POST_TYPE ) ) && $wp_query->found_posts == 1 )
-		//	{ 
-		//		if( apply_filters( 'maxson_portfolio_redirect_single_search_result', true ) )
-		//		{ 
-		//			$project = maxson_portfolio_get_project( $wp_query->post );
-
-		//			if( $project )
-		//			{ 
-		//				wp_safe_redirect( $project->get_permalink(), 302 );
-		//				exit;
-
-		//			} // endif
-		//		} // endif
 			} // endif
 		}
 			
@@ -189,39 +175,39 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Frontend' ) )
 
 		public function post_class( $classes, $class = '', $post_id = '' )
 		{ 
-			if( is_admin() || ! $post_id || self::POST_TYPE !== get_post_type( $post_id ) )
+			if( ! $post_id || self::POST_TYPE !== get_post_type( $post_id ) )
 			{ 
 				return $classes;
 
 			} // endif
 
-			$project = maxson_portfolio_get_project( $post_id );
+			$teaser_count = get_theme_mod( 'maxson_project_teaser_column_count', '3' );
 
-			if( $project )
+			$classes[] = apply_filters( 'maxson_portfolio_project_column_class', sanitize_html_class( "column-count-{$teaser_count}" ), $post_id );
+
+			$project_type = str_replace( '_', '-', maxson_project_data_type( $post_id, 'slug' ) );
+
+			$classes[] = sanitize_html_class( "project-type-{$project_type}" );
+
+
+			if( maxson_project_data_has_callout( $post_id ) )
 			{ 
-				if( $project->is_promoted() )
-				{ 
-					$include_classes[] = 'project-is-promoted';
-
-				} // endif
-
-
-				$type = $project->get_type( 'meta' );
-
-				$classes[] = "project-type-{$type}";
-
-
-				$classes = array_merge( $classes, apply_filters( 'maxson_portfolio_post_classes_include', array(), $post_id ) );
-
-				$classes = array_diff( $classes, apply_filters( 'maxson_portfolio_post_classes_exclude', array(), $post_id ) );
-
-				return apply_filters( 'maxson_portfolio_post_classes', array_unique( $classes ), $post_id );
-
-			} else
-			{ 
-				return $classes;
+				$classes[] = sanitize_html_class( 'project-has-callout' );
 
 			} // endif
+
+
+			$include = apply_filters( 'maxson_portfolio_post_classes_include', array(), $post_id );
+
+			$classes = array_merge( $classes, $include );
+
+
+			$exclude = apply_filters( 'maxson_portfolio_post_classes_exclude', array(), $post_id );
+			$exclude[] = 'hentry';
+
+			$classes = array_diff( $classes, $exclude );
+
+			return apply_filters( 'maxson_portfolio_project_classes', array_unique( array_filter( $classes ) ), $post_id );
 		}
 
 
@@ -236,7 +222,10 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Frontend' ) )
 		public function nav_menu_classes( $menu_items, $args )
 		{ 
 			if( ! is_portfolio() )
+			{ 
 				return $menu_items;
+
+			} // endif
 
 			$archive_page 	= (int) maxson_portfolio_get_archive_page_id();
 			$page_for_posts = (int) get_option( 'page_for_posts' );

@@ -184,43 +184,48 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Permalinks' ) )
 			echo wpautop( __( 'These settings control the permalinks used for Portfolio Projects.', 'maxson' ) );
 
 			?>
-			<table class="form-table portfolio-project-permalink-structure" id="maxson_portfolio_permalinks"><tbody>
+			<table class="form-table permalink-structure portfolio-project-permalink-structure" id="maxson_portfolio_permalinks"><tbody>
 				<tr>
-					<th>
-						<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_default_permalink_structure" class="do-change" value="<?php echo $structures[0]; ?>"<?php checked( $structures[0], $permalink ); ?>>
-						<label for="portfolio_projects_default_permalink_structure"><?php _e( 'Default', 'maxson' ); ?></label></th>
+					<th><?php _e( 'Portfolio Projects Permalink Structure', 'maxson' ); ?></th>
 					<td>
-						<code><?php echo home_url(); ?>?portfolio_project=sample-project</code>
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_base_permalink_structure" class="do-change" value="<?php echo $structures[1]; ?>"<?php checked( $structures[1], $permalink ); ?>>
-						<label for="portfolio_projects_base_permalink_structure"><?php _e( 'Project base', 'maxson' ); ?></label></th>
-					<td>
-						<code><?php echo $base_url; ?>/sample-project/</code>
-					</td>
-				</tr>
-				<?php if( maxson_portfolio_taxonomy_exists( 'category' ) )
-				{ ?>
-					<tr>
-						<th>
-							<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_base_category_permalink_structure" class="do-change" value="<?php echo $structures[2]; ?>"<?php checked( $structures[2], $permalink ); ?>>
-							<label for="portfolio_projects_base_category_permalink_structure"><?php _e( 'Project base with category', 'maxson' ); ?></label></th>
-						<td><code><?php echo $base_url; ?>/portfolio-category/sample-project/</code></td>
-					</tr>
-				<?php } // endif ?>
+						<fieldset class="structure-selection">
+							<legend class="screen-reader-text"><?php _e( 'Portfolio Projects Permalink Structure', 'maxson' ); ?></legend>
+							<div class="row">
+								<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_default_permalink_structure" class="do-change" value="<?php echo $structures[0]; ?>"<?php checked( $structures[0], $permalink ); ?>>
+								<div>
+									<label for="portfolio_projects_default_permalink_structure"><?php _e( 'Default', 'maxson' ); ?></label>
+									<p><code><?php echo home_url(); ?>?portfolio_project=sample-project</code></p>
+								</div>
+							</div>
+							<div class="row">
+								<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_base_permalink_structure" class="do-change" value="<?php echo $structures[1]; ?>"<?php checked( $structures[1], $permalink ); ?>>
+								<div>
+									<label for="portfolio_projects_base_permalink_structure"><?php _e( 'Project base', 'maxson' ); ?></label>
+									<p><code><?php echo $base_url; ?>/sample-project/</code></p>
+								</div>
+							</div>
+							<?php if( taxonomy_exists( 'project_category' ) )
+							{ ?>
+								<div class="row">
+									<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_base_category_permalink_structure" class="do-change" value="<?php echo $structures[2]; ?>"<?php checked( $structures[2], $permalink ); ?>>
+									<div>
+										<label for="portfolio_projects_base_category_permalink_structure"><?php _e( 'Project base with category', 'maxson' ); ?></label>
+										<p><code><?php echo $base_url; ?>/portfolio-category/sample-project/</code></p>
+									</div>
+								</div>
+							<?php } // endif ?>
+							<div class="row">
+								<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_custom_permalink_structure" value="custom"<?php checked( in_array( $permalink, $structures ), false ); ?>>
+								<div>
+									<label for="portfolio_projects_custom_permalink_structure"><?php _e( 'Custom Base', 'maxson' ); ?></label>
+									<p><code><?php echo home_url() . $blog_prefix; ?></code><input type="text" name="maxson_portfolio_permalink_settings" id="maxson_portfolio_permalink_settings" value="<?php echo esc_attr( $permalink ); ?>" class="regular-text code"></p>
 
-				<tr>
-					<th>
-						<input type="radio" name="maxson_portfolio_permalink_structure" id="portfolio_projects_custom_permalink_structure" value="custom"<?php checked( in_array( $permalink, $structures ), false ); ?>>
-						<label for="portfolio_projects_custom_permalink_structure"><?php _e( 'Custom Base', 'maxson' ); ?></label></th>
-					<td>
-						<code><?php echo home_url() . $blog_prefix; ?></code><input type="text" name="maxson_portfolio_permalink_settings" id="maxson_portfolio_permalink_settings" value="<?php echo esc_attr( $permalink ); ?>" class="regular-text code">
+									<input type="hidden" name="maxson_portfolio_permalink_base" value="<?php esc_attr_e( $base_slug ); ?>">
 
-						<input type="hidden" name="maxson_portfolio_permalink_base" value="<?php esc_attr_e( $base_slug ); ?>">
-
-						<p class="description"><?php printf( __( 'Enter a custom base to use. A base %1$smust%2$s be set or WordPress will use default instead.', 'maxson' ), '<strong>', '</strong>' ); ?></p>
+									<p class="description"><?php printf( __( 'Enter a custom base to use. A base %1$smust%2$s be set or WordPress will use default instead.', 'maxson' ), '<strong>', '</strong>' ); ?></p>
+								</div>
+							</div>
+						</fieldset>
 					</td>
 				</tr>
 			</tbody></table>
@@ -232,12 +237,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Permalinks' ) )
 					});
 
 					jQuery( '#maxson_portfolio_permalink_settings' ).on( 'focus', function(){
-						jQuery( '#portfolio_projects_custom_permalink_structure' ).click();
+						jQuery( '#portfolio_projects_custom_permalink_structure' ).trigger( 'click' );
 					});
 
 					// Set permalink to default when main is set to default
 					jQuery( '.permalink-structure:first' ).on( 'change', 'input[type="radio"]:first', function( event ){ 
-						jQuery( '#portfolio_projects_default_permalink_structure' ).click();
+						jQuery( '#portfolio_projects_default_permalink_structure' ).trigger( 'click' );
 					});
 				});
 			</script>

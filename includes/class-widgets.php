@@ -60,26 +60,21 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Widgets' ) )
 
 		public function register()
 		{ 
-			if( maxson_portfolio_taxonomy_exists( 'category' ) )
+			if( taxonomy_exists( 'portfolio_category' ) )
 			{ 
 				register_widget( 'Maxson_Portfolio_Projects_Widget_Categories' );
 
 			} // endif
 
 
-			if( maxson_portfolio_taxonomy_exists( 'tag' ) )
+			if( taxonomy_exists( 'portfolio_tag' ) )
 			{ 
 				register_widget( 'Maxson_Portfolio_Projects_Widget_Tags' );
 
 			} // endif
 
 
-			if( maxson_portfolio_get_option( 'setup_promoted' ) )
-			{ 
-				register_widget( 'Maxson_Portfolio_Projects_Widget_Promoted' );
-
-			} // endif
-
+			register_widget( 'Maxson_Portfolio_Projects_Widget_Promoted' );
 
 			register_widget( 'Maxson_Portfolio_Projects_Widget_Recent' );
 		}

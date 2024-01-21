@@ -352,17 +352,11 @@ abstract class Maxson_Portfolio_Projects_Admin_List_Table {
 
 	public function render_columns( $column, $post_id )
 	{ 
-		$this->prepare_row_data( $post_id );
+		global $post;
 
-		if( ! $this->object )
+		if( is_callable( array( $this, "render_{$column}_column" ) ) )
 		{ 
-			return;
-
-		} // endif
-
-		if( is_callable( array( $this, 'render_' . $column . '_column' ) ) )
-		{ 
-			$this->{"render_{$column}_column"}();
+			$this->{"render_{$column}_column"}( $post_id, $post );
 
 		} // endif
 	}

@@ -264,7 +264,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Notices' ) )
 
 			$installed_pages = get_option( 'maxson_portfolio_install_pages_notice' );
 
-			if( ( false === $installed_pages ) && 
+			if( ( false == $installed_pages ) && 
 				in_array( $screen->id, maxson_portfolio_get_admin_screen_ids() ) )
 			{ 
 				include( MAXSON_PORTFOLIO_DIRNAME . '/includes/admin/views/html-admin-notice-install-pages.php' );

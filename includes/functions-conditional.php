@@ -124,31 +124,6 @@ if( ! function_exists( 'is_project' ) )
 } // endif
 
 
-/**
- * Return if plugin-specific taxonomy is active
- * 
- * @return      bool
- */
-
-function maxson_portfolio_taxonomy_exists( $type = 'category' )
-{ 
-	$taxonomies = maxson_portfolio_get_taxonomy_types();
-
-	if( ! empty( $taxonomies ) )
-	{ 
-		$tax_allowed = array_key_exists( $type, $taxonomies );
-		$tax_exists  = taxonomy_exists( "portfolio_{$type}" );
-
-		return ( $tax_allowed && $tax_exists ) ? true : false;
-
-	} else
-	{ 
-		return false;
-
-	} // endif
-}
-
-
 if( ! function_exists( 'maxson_portfolio_is_request' ) )
 { 
 	/**

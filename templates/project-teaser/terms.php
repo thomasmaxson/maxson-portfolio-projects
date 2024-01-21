@@ -17,8 +17,11 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
-
-echo $project->get_categories( ' / ', '<div class="entry-meta">', '</div>', false );
+echo maxson_project_data_term_categories( get_the_ID(), array( 
+	'link'      => false, 
+	'separator' => ' / ', 
+	'before'    => '<div class="entry-meta">', 
+	'after'     => '</div>'
+) );
 
 ?>

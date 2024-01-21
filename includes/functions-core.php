@@ -54,70 +54,7 @@ add_filter( 'maxson_portfolio_the_content', 'do_shortcode', 11 ); // AFTER wpaut
 
 function maxson_portfolio_get_taxonomy_types()
 { 
-	$default_types = array( 
-		'category' => __( 'Category', 'maxson' ), 
-		'role'     => __( 'Role', 'maxson' ), 
-		'tag'      => __( 'Tag', 'maxson' ), 
-		'type'     => __( 'Type', 'maxson' )
-	);
-
-	$types = array_unique( apply_filters( 'maxson_portfolio_taxonomy_types', $default_types ) );
-
-	return ( empty( $types ) || ! is_array( $types ) ) ? $default_types : $types;
-}
-
-
-/**
- * Get plugin-specific supported media types
- * 
- * @return      array Array of media types
- */
-
-function maxson_portfolio_get_project_types()
-{ 
-	$defaults = array( 
-	//	'none'    => __( 'None', 'maxson' ), 
-		'audio'   => __( 'Audio', 'maxson' ), 
-		'gallery' => __( 'Gallery', 'maxson' ), 
-		'image'   => __( 'Image', 'maxson' ), 
-		'video'   => __( 'Video', 'maxson' )
-	);
-
-	$types = array_unique( apply_filters( 'maxson_portfolio_project_types', $defaults ) );
-
-	return ( empty( $types ) || ! is_array( $types ) ) ? $defaults : $types;
-}
-
-
-/**
- * Get plugin-specific supported audio formats
- * 
- * @return      array Array of audio formats
- */
-
-function maxson_portfolio_get_audio_formats()
-{ 
-	$defaults = wp_get_audio_extensions();
-
-	$formats = array_unique( apply_filters( 'maxson_portfolio_audio_formats', $defaults ) );
-
-	return ( empty( $formats ) || ! is_array( $formats ) ) ? $defaults : $formats;
-}
-
-
-/**
- * Get plugin-specific supported video formats
- * 
- * @return      array Array of video formats
- */
-
-function maxson_portfolio_get_video_formats()
-{ 
-	$defaults = wp_get_video_extensions();
-
-	$formats = array_unique( apply_filters( 'maxson_portfolio_video_formats', $defaults ) );
-
-	return ( empty( $formats ) || ! is_array( $formats ) ) ? $defaults : $formats;
+	return get_object_taxonomies( 'portfolio_project' );
 }
 
 
@@ -155,7 +92,7 @@ function maxson_portfolio_print_js()
 	{ 
 		$maxson_portfolio_js = wp_check_invalid_utf8( $maxson_portfolio_js, true );
 
-		if( '' == $maxson_portfolio_js )
+		if ( '' == $maxson_portfolio_js )
 		{
 			return false;
 
@@ -190,30 +127,6 @@ function maxson_portfolio_get_minified_suffix()
 { 
 //	return ( maxson_portfolio_in_debug_mode() ) ? '.min' : false;
 	return ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : false;
-}
-
-
-/**
- * Create array of blog ids in the network if multisite setting is on
- * 
- * @return      array Array of blog IDs
- */
-
-function maxson_portfolio_get_network_blog_ids()
-{ 
-	if( is_multisite() )
-	{ 
-		global $wpdb;
-
-		$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
-
-	} else
-	{ 
-		$blog_ids = array( get_current_blog_id() );
-
-	} // endif
-
-	return $blog_ids;
 }
 
 
@@ -290,7 +203,7 @@ function maxson_portfolio_get_archive_page_id()
 { 
 	$archive_id = maxson_portfolio_get_option( 'archive_page_id' );
 
-	return ( ! empty( $archive_id ) && ( -1 != $archive_id ) ) ? absint( $archive_id ) : false;
+	return ( ! empty( $archive_id ) && ( -1 != $archive_id ) ) ? $archive_id : false;
 }
 
 
@@ -336,20 +249,6 @@ function maxson_portfolio_get_archive_page_url()
 		return get_post_type_archive_link( 'portfolio_project' );
 
 	} // endif
-}
-
-
-/**
- * Get plugin-specific default label
- * 
- * @return      string
- */
-
-function maxson_portfolio_get_default_promoted_label()
-{ 
-	$label = _x( 'Promoted', 'Portfolio project default promoted label', 'maxson' );
-
-	return apply_filters( 'maxson_portfolio_default_promoted_label', $label );
 }
 
 

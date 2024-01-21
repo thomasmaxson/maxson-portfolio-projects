@@ -16,8 +16,6 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
-
 ?>
 <li id="post-<?php the_ID(); ?>" <?php post_class( 'project-teaser' ); ?>>
 	<?php /**
@@ -26,7 +24,7 @@ global $project;
 
 	do_action( 'maxson_portfolio_project_teaser_before_link' ); ?>
 
-	<a href="<?php echo $project->get_permalink(); ?>" class="entry-link" rel="bookmark">
+	<a href="<?php echo get_permalink(); ?>" class="entry-link" rel="bookmark">
 		<?php /**
 		 * maxson_portfolio_project_teaser_before_summary hook
 		 *
@@ -43,7 +41,9 @@ global $project;
 
 			do_action( 'maxson_portfolio_project_teaser_before_title' );
 
-			echo $project->get_title( '<h3 class="entry-title project-title">', '</h3>' );
+			$headingTag = apply_filters( 'maxson_portfolio_projects_title_tag', 'h3' );
+
+			the_title( "<$headingTag class=\"entry-title project-title\">", "</$headingTag>", true );
 
 			/**
 			 * maxson_portfolio_project_teaser_after_title hook

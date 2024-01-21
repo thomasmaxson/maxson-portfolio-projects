@@ -1,0 +1,153 @@
+// 
+// Portfolio Grid
+// ----------------------------------------
+
+@_portfolio-grid--margin: 10px;
+
+.portfolio-grid { 
+	margin: @_portfolio-grid--margin -( @_portfolio-grid--margin );
+	margin-top: 0;
+	height: auto !important;
+
+	* { box-sizing: border-box;
+
+		&:before, 
+		&:after { box-sizing: border-box;}
+	}
+
+
+	.portfolio-grid--teasers { 
+		padding: 0;
+		margin: 0;
+		list-style: none;
+
+		> li { 
+			float: left;
+			padding: @_portfolio-grid--margin;
+			padding-top: 0;
+			margin: 0;
+			list-style: none;
+
+			@media ( max-width: 768px ){ 
+				width: 50%;
+			}
+
+			@media ( max-width: 992px ){ 
+				width: 33.33333%;
+			}
+		}
+	}
+
+
+	.portfolio-grid--filters { 
+		margin: @_portfolio-grid--margin 0;
+		text-align: center;
+
+		&:after { 
+			content: '';
+			display: table;
+			clear: both;
+		}
+
+		.portfolio-filters--title { 
+			margin: 0 0 @_portfolio-grid--margin;
+		}
+
+		ul.portfolio-filters { 
+			padding: 0;
+			margin: 0;
+			white-space: nowrap;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+
+			li { 
+				display: inline-block;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+
+				button { 
+					padding: ( @_portfolio-grid--margin / 2 ) @_portfolio-grid--margin;
+					border: none;
+					margin: 0;
+					background: transparent;
+					cursor: pointer;
+
+					&:focus { outline: 1px dotted;}
+				}
+
+				&.active { 
+					button { 
+						color: black;
+						cursor: default;
+					}
+				}
+
+				+ li { 
+					margin-left: @_portfolio-grid--margin;
+				}
+			}
+		}
+	}
+
+
+	.project-grid--teasers { 
+		position: relative;
+		border: 2px solid lime;
+		height: auto !important;
+
+		&:after { 
+			content: '';
+			display: table;
+			clear: both;
+		}
+	}
+
+	.project-teaser { 
+
+		&--link { 
+			display: block;
+			position: relative;
+			border: 1px solid #ababab;
+			color: inherit;
+		}
+
+		&--content { 
+			display: block;
+			padding: @_portfolio-grid--margin;
+			padding-bottom: 0;
+			text-align: center;
+		}
+
+		&--title { 
+			margin: 0;
+			margin-bottom: @_portfolio-grid--margin;
+			color: inherit;
+			font-family: inherit;
+		}
+
+		&--excerpt {}
+
+		&--taxonomy {}
+
+		&--thumbnail { 
+			text-align: center;
+
+			img { 
+				display: block;
+				max-width: 100%;
+				height: auto;
+			}
+		}
+
+		&--promoted-label { 
+			display: inline-block;
+			position: absolute;
+			top: @_portfolio-grid--margin;
+			left: 0;
+			padding: ( @_portfolio-grid--margin / 2 ) @_portfolio-grid--margin;
+			font-size: 80%;
+			background: #ababab;
+		}
+	}
+}

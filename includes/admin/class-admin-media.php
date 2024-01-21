@@ -58,8 +58,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 				add_settings_section( "maxson_portfolio_{$tab}_{$section}", 
 					__( 'Portfolio image sizes', 'maxson' ), array( &$this, 'description' ), $tab );
 
-				register_setting( $tab, 'maxson_portfolio_media_thumbnail_width' );
-				register_setting( $tab, 'maxson_portfolio_media_thumbnail_height' );
+				register_setting( $tab, 'maxson_portfolio_media_size_thumbnail_width' );
+				register_setting( $tab, 'maxson_portfolio_media_size_thumbnail_height' );
 				register_setting( $tab, 'maxson_portfolio_media_thumbnail_crop' );
 
 				$thumbnail_label = apply_filters( 'maxson_portfolio_media_thumbnail_label', _x( 'Project thumbnail size', 'Media setting label', 'maxson' ) );
@@ -71,9 +71,9 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 				);
 
 
-				register_setting( $tab, 'maxson_portfolio_media_medium_width' );
+				register_setting( $tab, 'maxson_portfolio_media_size_medium_width' );
 				register_setting( $tab, 'maxson_portfolio_media_medium_height' );
-				register_setting( $tab, 'maxson_portfolio_media_medium_crop' );
+				register_setting( $tab, 'maxson_portfolio_media_size_medium_crop' );
 
 				$medium_label = apply_filters( 'maxson_portfolio_media_medium_label', _x( 'Project medium size', 'Media setting label', 'maxson' ) );
 
@@ -84,8 +84,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 				);
 
 
-				register_setting( $tab, 'maxson_portfolio_media_large_width' );
-				register_setting( $tab, 'maxson_portfolio_media_large_height' );
+				register_setting( $tab, 'maxson_portfolio_media_size_large_width' );
+				register_setting( $tab, 'maxson_portfolio_media_size_large_height' );
 				register_setting( $tab, 'maxson_portfolio_media_large_crop' );
 
 				$large_label = apply_filters( 'maxson_portfolio_media_large_label', _x( 'Project large size', 'Media setting label', 'maxson' ) );
@@ -138,8 +138,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 
 			$has_filter = ( has_filter( "maxson_portfolio_media_{$size}_image_size" ) ) ? true : false;
 
-			$name_w = "maxson_portfolio_media_{$size}_width";
-			$name_h = "maxson_portfolio_media_{$size}_height";
+			$name_w = "maxson_portfolio_media_size_{$size}_width";
+			$name_h = "maxson_portfolio_media_size_{$size}_height";
 			$name_c = "maxson_portfolio_media_{$size}_crop";
 			$value = maxson_portfolio_get_media_sizes( $size );
 
@@ -148,14 +148,18 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 			$width  = ( isset( $value['width'] ) )  ? $value['width']  : false;
 			$height = ( isset( $value['height'] ) ) ? $value['height'] : false;
 
+			echo '<fieldset>';
 			printf( '<label for="%1$s">%2$s</label>', esc_attr( $name_w ), $width_label );
 			echo ' ';
 			printf( '<input type="number" name="%1$s" id="%1$s" class="small-text" value="%2$s" step="1" min="0"%3$s>', esc_attr( $name_w ), esc_attr( $width ), $is_disabled );
+
+			echo '<br>';
 
 			echo ' ';
 			printf( '<label for="%1$s">%2$s</label>', esc_attr( $name_h ), $height_label );
 			echo ' ';
 			printf( '<input type="number" name="%1$s" id="%1$s" class="small-text" value="%2$s" step="1" min="0"%3$s>', esc_attr( $name_h ), esc_attr( $height ), $is_disabled );
+			echo '</fieldset>';
 
 			if( $show_crop )
 			{ 
@@ -163,7 +167,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 
 				$is_checked = checked( 1, $crop, false );
 
-				printf( '<br><input type="checkbox" name="%1$s" id="%2$s" value="1"%3$s%4$s><label for="%2$s">%5$s</label>', esc_attr( $name_c ), esc_attr( $name_c ), $is_checked, $is_disabled, __( "Crop project {$size} image to exact dimensions (normally {$size} images are proportional)", 'maxson' ) );
+				printf( '<input type="checkbox" name="%1$s" id="%2$s" value="1"%3$s%4$s><label for="%2$s">%5$s</label>', esc_attr( $name_c ), esc_attr( $name_c ), $is_checked, $is_disabled, __( "Crop project {$size} image to exact dimensions (normally {$size} images are proportional)", 'maxson' ) );
 
 			} // endif
 

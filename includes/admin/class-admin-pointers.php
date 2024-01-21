@@ -9,9 +9,6 @@
  * @version     1.0
  */
 
-// https://github.com/wp-premium/wordpress-seo-premium/blob/master/admin/class-pointers.php
-// http://wordpress.stackexchange.com/questions/162745/create-wp-tutorial-for-users-with-admin-pointer-using-next-button-for-navigation
-
 // Exit if accessed directly
 if( ! defined( 'ABSPATH' ) )
 { 
@@ -189,72 +186,56 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Pointers' ) )
 			} // endif
 
 
-			if( maxson_portfolio_get_option( 'setup_portfolio_role' ) )
-			{ 
-				$pointers['portfolio_projects_project_role'] = array( 
-					'target'  => '#tagsdiv-portfolio_role', 
-					'options' => array( 
-						'content' => '<h3>' . esc_html__( 'Project Roles', 'maxson' ) . '</h3><p>' . esc_html__( 'Optionally assign the role you had when you were apart of this project.', 'maxson' ) . '</p>', 
-						'position'  => array( 
-							'edge'  => 'right', 
-							'align' => 'top'
-						)
+		$pointers['portfolio_projects_project_role'] = array( 
+				'target'  => '#tagsdiv-portfolio_role', 
+				'options' => array( 
+					'content' => '<h3>' . esc_html__( 'Project Roles', 'maxson' ) . '</h3><p>' . esc_html__( 'Optionally assign the role you had when you were apart of this project.', 'maxson' ) . '</p>', 
+					'position'  => array( 
+						'edge'  => 'right', 
+						'align' => 'top'
 					)
-				);
+				)
+			);
 
-			} // endif
 
-
-			if( maxson_portfolio_get_option( 'setup_portfolio_tag' ) )
-			{ 
-				$pointers['portfolio_projects_project_tag'] = array( 
-					'target'  => '#tagsdiv-portfolio_tag', 
-					'options' => array( 
-						'content' => '<h3>' . esc_html__( 'Project Tags', 'maxson' ) . '</h3><p>' . esc_html__( 'You can "tag" your projects here. Tags are a method of labeling your projects to make them easier to find.', 'maxson' ) . '</p>', 
-						'position'  => array( 
-							'edge'  => 'right', 
-							'align' => 'top'
-						)
+			$pointers['portfolio_projects_project_tag'] = array( 
+				'target'  => '#tagsdiv-portfolio_tag', 
+				'options' => array( 
+					'content' => '<h3>' . esc_html__( 'Project Tags', 'maxson' ) . '</h3><p>' . esc_html__( 'You can "tag" your projects here. Tags are a method of labeling your projects to make them easier to find.', 'maxson' ) . '</p>', 
+					'position'  => array( 
+						'edge'  => 'right', 
+						'align' => 'top'
 					)
-				);
+				)
+			);
 
-			} // endif
 
-
-			if( maxson_portfolio_get_option( 'setup_portfolio_category' ) )
-			{ 
-				$pointers['portfolio_projects_project_category'] = array( 
-					'target'  => '#portfolio_categorydiv', 
-					'options' => array( 
-						'content' => '<h3>' . esc_html__( 'Project Categories', 'maxson' ) . '</h3><p>' . esc_html__( 'Optionally assign categories to your projects to make them easier to browse through and file in your portfolio.', 'maxson' ) . '</p>', 
-						'position'  => array( 
-							'edge'  => 'right', 
-							'align' => 'top'
-						)
+			$pointers['portfolio_projects_project_category'] = array( 
+				'target'  => '#portfolio_categorydiv', 
+				'options' => array( 
+					'content' => '<h3>' . esc_html__( 'Project Categories', 'maxson' ) . '</h3><p>' . esc_html__( 'Optionally assign categories to your projects to make them easier to browse through and file in your portfolio.', 'maxson' ) . '</p>', 
+					'position'  => array( 
+						'edge'  => 'right', 
+						'align' => 'top'
 					)
-				);
+				)
+			);
 
-			} // endif
 
-
-			if( maxson_portfolio_get_option( 'setup_promoted' ) )
-			{ 
-				$pointers['portfolio_projects_project_promoted'] = array( 
-					'target'  => '#portfolio-projects-promoted-pointer', 
-					'trigger' => array( 
-						'target' => '#portfolio-projects-promoted-pointer input[type="checkbox"]', 
-						'event'  => 'change blur click'
-					), 
-					'options' => array( 
-						'content' => '<h3>' . esc_html__( 'Project Promoted', 'maxson' ) . '</h3><p>' . esc_html__( 'Add promoted flags to your projects.', 'maxson' ) . '</p>', 
-						'position'  => array( 
-							'edge'  => 'right', 
-							'align' => 'middle'
-						)
+			$pointers['portfolio_projects_project_callout'] = array( 
+				'target'  => '#portfolio-projects-callout-pointer', 
+				'trigger' => array( 
+					'target' => '#portfolio-projects-callout-pointer input[type="checkbox"]', 
+					'event'  => 'change blur click'
+				), 
+				'options' => array( 
+					'content' => '<h3>' . esc_html__( 'Project Callout', 'maxson' ) . '</h3><p>' . esc_html__( 'Add callout flags to your projects.', 'maxson' ) . '</p>', 
+					'position'  => array( 
+						'edge'  => 'right', 
+						'align' => 'middle'
 					)
-				);
-
-			} // endif
+				)
+			);
 
 
 			$pointers['portfolio_projects_project_submit'] = array( 

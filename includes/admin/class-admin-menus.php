@@ -37,7 +37,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 			add_action( 'admin_head', array( &$this, 'menu_highlight' ) );
 			add_action( 'admin_menu', array( &$this, 'sanitize_settings' ) );
 
-			add_action( 'admin_menu', array( &$this, 'settings_menu' ) );
 			add_action( 'admin_menu', array( &$this, 'tools_menu' ) );
 		//	add_action( 'admin_menu', array( &$this, 'extensions_menu' ) );
 		}
@@ -87,6 +86,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 		 * Add menu item
 		 */
 
+<<<<<<< Updated upstream
 		public static function settings_menu()
 		{ 
 			$capability = apply_filters( 'maxson_portfolio_settings_menu_capability', 'manage_portfolio_settings' );
@@ -104,6 +104,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Menus' ) )
 		 * Add menu item
 		 */
 
+=======
+>>>>>>> Stashed changes
 		public static function tools_menu()
 		{ 
 			$capability = apply_filters( 'maxson_portfolio_tools_menu_capability', 'manage_portfolio_tools' );

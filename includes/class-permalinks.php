@@ -36,8 +36,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Permalinks' ) )
 		{ 
 			add_action( 'init', array( &$this, 'rewrite' ) );
 
-			add_filter( 'post_type_archive_link', array( &$this, 'archive_link' ), 10, 2 );
-
 			add_filter( 'post_link', array( &$this, 'post_link' ), 1, 3 );
 			add_filter( 'post_type_link', array( &$this, 'post_link' ), 1, 3 );
 		}
@@ -54,32 +52,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Permalinks' ) )
 			add_rewrite_tag( '%project_category%', '([^&]+)' );
 			add_rewrite_tag( '%project_tag%', '([^&]+)' );
 			add_rewrite_tag( '%project_role%', '([^&]+)' );
-		}
-
-
-		/**
-		 * Filter the post type archive permalink when post type archive is set as home page
-		 * 
-		 * @return      string
-		 */
-
-		public function archive_link( $link, $post_type )
-		{ 
-			// Abort if post is not a project
-			if( self::POST_TYPE !== $post_type )
-			{
-				return $link;
-
-			} // endif
-
-			// Abort if archive is not set to home page
-			if( maxson_portfolio_get_archive_page_id() !== get_option( 'page_on_front' ) )
-			{
-				return $link;
-
-			} // endif
-
-    		return home_url();
 		}
 
 
@@ -108,48 +80,36 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Permalinks' ) )
 
 			} // endif
 
+			$cat_terms = get_the_terms( $post->ID, 'portfolio_category' );
 			$project_cat = _x( 'uncategorized', 'Project taxonomy category slug', 'maxson' );
 
-			if( maxson_portfolio_taxonomy_exists( 'category' ) )
+			if( ! is_wp_error( $cat_terms ) && ! empty( $cat_terms ) )
 			{ 
-				$cat_terms = get_the_terms( $post->ID, 'portfolio_category' );
+				$first_cat_term = array_shift( $cat_terms );
+				$project_cat = $first_cat_term->slug;
 
-				if( ! is_wp_error( $cat_terms ) && ! empty( $cat_terms ) )
-				{ 
-					$first_cat_term = array_shift( $cat_terms );
-					$project_cat = $first_cat_term->slug;
-
-				} // endif
 			} // endif
 
 
+			$role_terms = get_the_terms( $post->ID, 'portfolio_role' );
 			$project_role = _x( 'no-role', 'Project taxonomy role slug', 'maxson' );
 
-			if( maxson_portfolio_taxonomy_exists( 'role' ) )
+			if( ! is_wp_error( $role_terms ) && ! empty( $role_terms ) )
 			{ 
-				$role_terms = get_the_terms( $post->ID, 'portfolio_role' );
+				$first_role_term = array_shift( $role_terms );
+				$project_role = $first_role_term->slug;
 
-				if( ! is_wp_error( $role_terms ) && ! empty( $role_terms ) )
-				{ 
-					$first_role_term = array_shift( $role_terms );
-					$project_role = $first_role_term->slug;
-
-				} // endif
 			} // endif
 
 
+			$tag_terms = get_the_terms( $post->ID, 'portfolio_tag' );
 			$project_tag = _x( 'untagged', 'Project taxonomy tag slug', 'maxson' );
 
-			if( maxson_portfolio_taxonomy_exists( 'tag' ) )
+			if( ! is_wp_error( $tag_terms ) && ! empty( $tag_terms ) )
 			{ 
-				$tag_terms = get_the_terms( $post->ID, 'portfolio_tag' );
+				$first_tag_term = array_shift( $tag_terms );
+				$project_tag = $first_tag_term->slug;
 
-				if( ! is_wp_error( $tag_terms ) && ! empty( $tag_terms ) )
-				{ 
-					$first_tag_term = array_shift( $tag_terms );
-					$project_tag = $first_tag_term->slug;
-
-				} // endif
 			} // endif
 
 

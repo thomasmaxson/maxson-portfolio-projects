@@ -29,24 +29,11 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Install' ) )
 
 
 		/**
-		 * Update version and files
-		 */
-
-		private static $updates = array( 
-			'1.1' => 'includes/updates/update-1.1.php', 
-			'2.0' => 'includes/updates/update-2.0.php', 
-		//	'2.2' => 'includes/updates/update-2.2.php'
-		);
-
-
-		/**
 		 * Construct
 		 */
 
 		public function __construct()
 		{ 
-			add_action( 'admin_init', array( &$this, 'update' ), 5 );
-
 			add_action( 'init', array( &$this, 'support_jetpack_omnisearch' ) );
 
 			add_action( 'trashed_post', array( &$this, 'trashed_archive_page' ) );
@@ -61,7 +48,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Install' ) )
 
 		public static function install()
 		{ 
-			self::create_capabilities();
 			self::create_options();
 
 			$current_version = get_option( 'maxson_portfolio_version' );
@@ -86,109 +72,11 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Install' ) )
 
 		public static function uninstall()
 		{ 
-			self::remove_capabilities();
-
 			if( false === maxson_portfolio_get_archive_page_id() )
 			{ 
 				delete_option( 'maxson_portfolio_install_pages_notice' );
 
 			} // endif
-		}
-
-
-		/**
-		 * Handle plugin-specific updates
-		 * 
-		 * @return      void
-		 */
-
-		public function update()
-		{ 
-			$old_version = get_option( 'maxson_portfolio_version' );
-			$new_version = MAXSON_PORTFOLIO_VERSION;
-
-			if( ! defined( 'IFRAME_REQUEST' ) && version_compare( $new_version, $old_version, '>' ) )
-			{ 
-				if( is_array( self::$updates ) && ! empty( self::$updates ) )
-				{ 
-					foreach( self::$updates as $version => $file )
-					{ 
-						if( version_compare( $new_version, $version, '>' ) )
-						{ 
-							include( MAXSON_PORTFOLIO_DIRNAME . "/{$file}" );
-
-						} // endif
-					} // endforeach
-
-					do_action( 'maxson_portfolio_updated', $new_version, $old_version );
-
-					self::update_version();
-
-				} // endif
-			} // endif
-		}
-
-
-		/**
-		 * Update plugin version
-		 * 
-		 * @return      void
-		 */
-
-		private static function update_version()
-		{ 
-			$old_version = maxson_portfolio_get_option( 'general', 'version' );
-			$new_version = MAXSON_PORTFOLIO_VERSION;
-
-			update_option( 'maxson_portfolio_version_prev', $old_version );
-			update_option( 'maxson_portfolio_version', $new_version );
-		}
-
-
-		/**
-		 * Create roles and capabilities
-		 * 
-		 * @return      void
-		 */
-
-		public static function create_capabilities()
-		{ 
-			global $wp_roles;
-
-			// Check if $wp_roles has been initialized
-			if( isset( $wp_roles ) && is_object( $wp_roles ) )
-			{ 
-				$wp_roles->add_cap( 'administrator', 'manage_portfolio_settings' );
-				$wp_roles->add_cap( 'administrator', 'manage_portfolio_tools' );
-
-			} // endif
-		}
-
-
-		/**
-		 * Remove user capabilities
-		 * 
-		 * @return      void
-		 */
-
-		public static function remove_capabilities()
-		{ 
-			if( ! function_exists( 'get_editable_roles' ) )
-			{ 
-				require_once( ABSPATH . '/wp-admin/includes/user.php' );
-
-			} // endif
-
-			global $wp_roles;
-
-			$user_roles = array_keys( get_editable_roles() );
-
-			foreach( $user_roles as $user_role )
-			{ 
-				$wp_roles->remove_cap( $user_role, 'manage_portfolio_settings' );
-				$wp_roles->remove_cap( $user_role, 'manage_portfolio_tools' );
-
-			} // endforeach
 		}
 
 
@@ -220,24 +108,24 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Install' ) )
 			$default_thumbnail_h = get_option( 'thumbnail_size_height' );
 			$default_thumbnail_c = get_option( 'thumbnail_crop' );
 
-			add_option( 'maxson_portfolio_media_thumbnail_width',  $default_thumbnail_w );
-			add_option( 'maxson_portfolio_media_thumbnail_height', $default_thumbnail_h );
+			add_option( 'maxson_portfolio_media_size_thumbnail_width',  $default_thumbnail_w );
+			add_option( 'maxson_portfolio_media_size_thumbnail_height', $default_thumbnail_h );
 			add_option( 'maxson_portfolio_media_thumbnail_crop',   $default_thumbnail_c );
 
 			$default_medium_w = get_option( 'medium_size_width' );
 			$default_medium_h = get_option( 'medium_size_height' );
 			$default_medium_c = get_option( 'medium_crop' );
 
-			add_option( 'maxson_portfolio_media_medium_width',  $default_medium_w );
-			add_option( 'maxson_portfolio_media_medium_height', $default_medium_h );
+			add_option( 'maxson_portfolio_media_size_medium_width',  $default_medium_w );
+			add_option( 'maxson_portfolio_media_size_medium_height', $default_medium_h );
 			add_option( 'maxson_portfolio_media_medium_crop',   $default_medium_c );
 
 			$default_large_w = get_option( 'large_size_width' );
 			$default_large_h = get_option( 'large_size_height' );
 			$default_large_c = get_option( 'large_crop' );
 
-			add_option( 'maxson_portfolio_media_large_width',  $default_large_w );
-			add_option( 'maxson_portfolio_media_large_height', $default_large_h );
+			add_option( 'maxson_portfolio_media_size_large_width',  $default_large_w );
+			add_option( 'maxson_portfolio_media_size_large_height', $default_large_h );
 			add_option( 'maxson_portfolio_media_large_crop',   $default_large_c );
 
 
@@ -252,22 +140,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Install' ) )
 			add_option( 'maxson_portfolio_permalink_role',     $default_permalink_role );
 			add_option( 'maxson_portfolio_permalink_tag',      $default_permalink_tag );
 			add_option( 'maxson_portfolio_permalink_type',     $default_permalink_type );
-
-
-			// Archive (Portfolio)
-			add_option( 'maxson_portfolio_archive_page_id',   false );
-			add_option( 'maxson_portfolio_archive_limit',     false );
-			add_option( 'maxson_portfolio_archive_order',     false );
-			add_option( 'maxson_portfolio_archive_orderby',   false );
-			add_option( 'maxson_portfolio_archive_thumbnail', true );
-
-
-			// Setup
-			add_option( 'maxson_portfolio_setup_promoted',          true );
-			add_option( 'maxson_portfolio_setup_taxonomy_category', true );
-			add_option( 'maxson_portfolio_setup_taxonomy_role',     true );
-			add_option( 'maxson_portfolio_setup_taxonomy_tag',      true );
-			add_option( 'maxson_portfolio_setup_taxonomy_type',     true );
 
 			flush_rewrite_rules();
 		}

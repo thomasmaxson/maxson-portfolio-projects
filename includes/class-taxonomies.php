@@ -37,7 +37,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 		public function __construct()
 		{ 
 			add_action( 'init', array( &$this, 'register' ), 5 );
-			add_action( 'init', array( &$this, 'create_terms' ), 5 );
 		}
 
 
@@ -59,28 +58,28 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 				'name'                       => $plural, 
 				'singular_name'              => $singular, 
 				'menu_name'                  => ( ! is_null( $menu_name ) ) ? $menu_name : $plural, 
-				'all_items'                  => sprintf( __( 'All %1$s', 'bluegreen' ), $plural ), 
-				'edit_item'                  => sprintf( __( 'Edit %1$s', 'bluegreen' ), $singular ), 
-				'view_item'                  => sprintf( __( 'View %1$s', 'bluegreen' ), $singular ), 
-				'update_item'                => sprintf( __( 'Update %1$s', 'bluegreen' ), $singular ), 
-				'add_new_item'               => sprintf( __( 'Add New %1$s', 'bluegreen' ), $singular ), 
-				'new_item_name'              => sprintf( __( 'Add %1$s Name', 'bluegreen' ), $singular ), 
-				'parent_item'                => sprintf( __( 'Parent %1$s', 'bluegreen' ), $singular ), 
-				'parent_item_colon'          => sprintf( __( 'Parent %1$s:', 'bluegreen' ), $singular ), 
-				'search_items'               => sprintf( __( 'Search %1$s', 'bluegreen' ), $singular ), 
-				'popular_items'              => sprintf( __( 'Popular %1$s', 'bluegreen' ), $plural ), 
+				'all_items'                  => sprintf( __( 'All %1$s', 'maxson' ), $plural ), 
+				'edit_item'                  => sprintf( __( 'Edit %1$s', 'maxson' ), $singular ), 
+				'view_item'                  => sprintf( __( 'View %1$s', 'maxson' ), $singular ), 
+				'update_item'                => sprintf( __( 'Update %1$s', 'maxson' ), $singular ), 
+				'add_new_item'               => sprintf( __( 'Add New %1$s', 'maxson' ), $singular ), 
+				'new_item_name'              => sprintf( __( 'Add %1$s Name', 'maxson' ), $singular ), 
+				'parent_item'                => sprintf( __( 'Parent %1$s', 'maxson' ), $singular ), 
+				'parent_item_colon'          => sprintf( __( 'Parent %1$s:', 'maxson' ), $singular ), 
+				'search_items'               => sprintf( __( 'Search %1$s', 'maxson' ), $singular ), 
+				'popular_items'              => sprintf( __( 'Popular %1$s', 'maxson' ), $plural ), 
 
-				'separate_items_with_commas' => sprintf( __( 'Separate %1$s with commas', 'bluegreen' ), strtolower( $plural ) ), 
-				'add_or_remove_items'        => sprintf( __( 'Add or remove %1$s', 'bluegreen' ), strtolower( $plural ) ), 
-				'choose_from_most_used'      => sprintf( __( 'Choose from the most used %1$s', 'bluegreen' ), strtolower( $plural ) ), 
-				'not_found'                  => sprintf( __( 'No %1$s found.', 'bluegreen' ), strtolower( $plural ) ), 
+				'separate_items_with_commas' => sprintf( __( 'Separate %1$s with commas', 'maxson' ), strtolower( $plural ) ), 
+				'add_or_remove_items'        => sprintf( __( 'Add or remove %1$s', 'maxson' ), strtolower( $plural ) ), 
+				'choose_from_most_used'      => sprintf( __( 'Choose from the most used %1$s', 'maxson' ), strtolower( $plural ) ), 
+				'not_found'                  => sprintf( __( 'No %1$s found.', 'maxson' ), strtolower( $plural ) ), 
 
 				// WordPress 4.3 Labels
-				'no_terms'                   => sprintf( __( 'No %1$s', 'bluegreen' ), strtolower( $plural ) ), 
+				'no_terms'                   => sprintf( __( 'No %1$s', 'maxson' ), strtolower( $plural ) ), 
 
 				// WordPress 4.4 Labels
-				'items_list_navigation'      => sprintf( __( '%1$s list navigation', 'bluegreen' ), strtolower( $plural ) ), 
-				'items_list'                 => sprintf( __( '%1$s list', 'bluegreen' ), strtolower( $plural ) )
+				'items_list_navigation'      => sprintf( __( '%1$s list navigation', 'maxson' ), strtolower( $plural ) ), 
+				'items_list'                 => sprintf( __( '%1$s list', 'maxson' ), strtolower( $plural ) )
 			);
 		}
 
@@ -102,7 +101,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 
 			do_action( 'maxson_portfolio_register_taxonomy' );
 
-			if( ! taxonomy_exists( 'portfolio_category' ) && maxson_portfolio_get_option( 'setup_portfolio_category' ) )
+			if( ! taxonomy_exists( 'portfolio_category' ) )
 			{ 
 				$label_singular  = __( 'Project Category', 'maxson' );
 				$label_plural    = __( 'Project Categories', 'maxson' );
@@ -157,7 +156,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 			} // endif
 
 
-			if( ! taxonomy_exists( 'portfolio_role' ) && maxson_portfolio_get_option( 'setup_portfolio_role' ) )
+			if( ! taxonomy_exists( 'portfolio_role' ) )
 			{ 
 				$label_singular  = __( 'Project Role', 'maxson' );
 				$label_plural    = __( 'Project Roles', 'maxson' );
@@ -198,7 +197,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 			} // endif
 
 
-			if( ! taxonomy_exists( 'portfolio_tag' ) && maxson_portfolio_get_option( 'setup_portfolio_tag' ) )
+			if( ! taxonomy_exists( 'portfolio_tag' ) )
 			{ 
 				$label_singular  = __( 'Project Tag', 'maxson' );
 				$label_plural    = __( 'Project Tags', 'maxson' );
@@ -289,47 +288,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 			} // endif
 
 			do_action( 'maxson_portfolio_after_register_taxonomy' );
-
-		}
-
-
-		/**
-		 * Add the default terms for taxonomies - Portfolio Project Types
-		 * 
-		 * @return      void
-		 */
-
-		public static function create_terms()
-		{ 
-			$taxonomies = array( 
-				'portfolio_type' => maxson_portfolio_get_project_types()
-			);
-
-			foreach( $taxonomies as $taxonomy => $terms )
-			{ 
-				foreach( $terms as $key => $value )
-				{ 
-					$slug = apply_filters( "maxson_portfolio_project_{$key}_default_slug", "{$key}-projects" );
-
-					if( false === ( $term = get_term_by( 'slug', $slug, $taxonomy ) ) )
-					{ 
-						$term = wp_insert_term( $value, $taxonomy, array( 
-							'slug' => $slug
-						) );
-
-						if( ! is_wp_error( $term ) )
-						{ 
-							$term_id = isset( $term->term_id ) ? $term->term_id : 0;
-
-							add_term_meta( $term_id, '_project_type', $key, true );
-
-						} // endif
-
-						do_action( 'maxson_portfolio_insert_term', $term, $slug );
-
-					} // endif
-				} // endforeach
-			} // endforeach
 		}
 
 	} // endclass

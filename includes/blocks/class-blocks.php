@@ -22,36 +22,18 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Blocks' ) )
 	class Maxson_Portfolio_Projects_Blocks { 
 
 		/**
-		 * Post Type
-		 */
-
-		const POST_TYPE = 'portfolio_project';
-
-
-		/**
 		 * Construct
 		 */
 
 		public function __construct()
 		{ 
-			// Skip block registration if Gutenberg is not enabled/merged.
 			if( ! function_exists( 'register_block_type' ) )
 			{ 
 				return;
 
 			} // endif
 
-			add_action( 'init', array( &$this, 'init' ) );
-		}
-
-
-		/**
-		 * Initialize block library features
-		 */
-
-		public static function init()
-		{ 
-			add_filter( 'block_categories', array( &$this, 'add_block_category' ) );
+			add_action( 'init', array( &$this, 'register' ) );
 		}
 
 
@@ -62,21 +44,30 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Blocks' ) )
 		 * @return      array
 		 */
 
-		public static function add_block_category( $categories )
+		public static function add_category( $categories )
 		{ 
-			return array_merge( $categories, array(
-				array(
-					'slug'  => 'portfolioprojects', 
-					'title' => __( 'Portfolio Projects', 'maxson' ), 
-					'icon'  => 'dashicons-portfolio'
-				)
+			array_push( $categories, array( 
+				'slug'  => 'portfolioprojects', 
+				'title' => __( 'Portfolio Projects', 'maxson' ), 
+				'icon'  => 'dashicons-portfolio'
 			) );
+
+			return $categories;
+		}
+
+
+		/**
+		 * Initialize new npm install @wordpress/scripts --save-devcategory
+		 */
+
+		public static function register()
+		{ 
+			add_filter( 'block_categories_all', array( __CLASS__, 'add_category' ) );
 		}
 
 	} // endclass
 } // endif
 
 return new Maxson_Portfolio_Projects_Blocks();
-// Maxson_Portfolio_Projects_Blocks::get_instance();
 
 ?>

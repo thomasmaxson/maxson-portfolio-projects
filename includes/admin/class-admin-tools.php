@@ -185,18 +185,10 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Tools' ) )
 			add_settings_section( "maxson_portfolio_{$tab}_{$section}", 
 				__( 'Taxonomies', 'maxson' ), '__return_FALSE', "maxson_portfolio_{$tab}" );
 
-		//	$taxonomies = get_object_taxonomies( 'portfolio_project' );
-			$taxonomies = maxson_portfolio_get_taxonomy_types();
+			$taxonomies = get_object_taxonomies( 'portfolio_project' );
 
-			foreach( $taxonomies as $key => $label )
+			foreach( $taxonomies as $taxonomy )
 			{ 
-				if( ! maxson_portfolio_taxonomy_exists( $key ) )
-				{ 
-					continue;
-
-				} // endif
-
-				$taxonomy = "portfolio_{$key}";
 				$taxonomy_obj = get_taxonomy( $taxonomy );
 
 			// Show all active taxonomies in Tools area

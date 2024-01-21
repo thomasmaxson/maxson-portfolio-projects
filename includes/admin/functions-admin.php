@@ -79,8 +79,6 @@ function maxson_portfolio_get_admin_screen_ids()
 	} // endforeach
 
 	$page_ids = array_merge( array( 
-		'portfolio_project_page_portfolio_extensions', 
-		'portfolio_project_page_portfolio_settings', 
 		'portfolio_project_page_portfolio_tools', 
 		'portfolio_project', 
 		'edit-portfolio_project', 

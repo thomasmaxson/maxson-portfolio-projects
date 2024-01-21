@@ -70,8 +70,8 @@ add_action( 'maxson_portfolio_archive_settings_after_loop', 'maxson_portfolio_te
  * @return      void
  */
 
-add_action( 'maxson_portfolio_project_teaser_before_summary', 'maxson_portfolio_template_teaser_thumbnail', 10 );
-add_action( 'maxson_portfolio_project_teaser_before_summary', 'maxson_portfolio_template_teaser_promoted_label', 20 );
+add_action( 'maxson_portfolio_project_teaser_before_summary', 'maxson_portfolio_get_project_teaser_thumbnail', 10 );
+add_action( 'maxson_portfolio_project_teaser_before_summary', 'maxson_portfolio_get_project_teaser_callout', 20 );
 
 
 /**
@@ -99,7 +99,7 @@ add_action( 'maxson_portfolio_project_teaser_before_summary', 'maxson_portfolio_
  * @return      void
  */
 
-add_action( 'maxson_portfolio_project_teaser_after_title', 'maxson_portfolio_template_teaser_terms', 30 );
+//add_action( 'maxson_portfolio_project_teaser_after_title', 'maxson_portfolio_get_project_teaser_terms', 30 );
 
 
 
@@ -145,7 +145,7 @@ add_action( 'maxson_portfolio_single_settings_before_project_content', 'maxson_p
  * @return      void
  */
 
-add_action( 'maxson_portfolio_single_settings_project_content', 'maxson_portfolio_template_single_promoted_label', 5 );
+add_action( 'maxson_portfolio_single_settings_project_content', 'maxson_portfolio_template_single_callout_label', 5 );
 add_action( 'maxson_portfolio_single_settings_project_content', 'maxson_portfolio_template_single_title', 10 );
 add_action( 'maxson_portfolio_single_settings_project_content', 'maxson_portfolio_template_single_description', 15 );
 add_action( 'maxson_portfolio_single_settings_project_content', 'maxson_portfolio_template_single_meta', 20 );

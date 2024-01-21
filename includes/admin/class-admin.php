@@ -36,8 +36,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin' ) )
 		{ 
 			add_filter( 'plugin_action_links_' . MAXSON_PORTFOLIO_BASENAME, array( &$this, 'plugin_action_links' ) );
 
-			add_action( 'admin_footer', 'maxson_portfolio_print_js', 25 );
-			add_filter( 'admin_footer_text', array( &$this, 'admin_footer_text' ), 1 );
+			//add_action( 'admin_footer', 'maxson_portfolio_print_js', 25 );
+			//add_filter( 'admin_footer_text', array( &$this, 'admin_footer_text' ), 1 );
 		}
 
 
@@ -112,20 +112,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin' ) )
 				$tools = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', esc_url( $tools_href ), __( 'Portfolio Tools', 'maxson' ), __( 'Tools', 'maxson' ) );
 
 				array_unshift( $links, $tools );
-
-			} // endif
-
-
-			if( current_user_can( 'manage_portfolio_settings' ) )
-			{ 
-				$settings_href = add_query_arg( array( 
-					'post_type' => 'portfolio_project', 
-					'page'      => 'portfolio_settings'
-				), admin_url( 'edit.php' ) );
-
-				$settings = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', esc_url( $settings_href ), __( 'Portfolio Settings', 'maxson' ), __( 'Settings', 'maxson' ) );
-
-				array_unshift( $links, $settings );
 
 			} // endif
 

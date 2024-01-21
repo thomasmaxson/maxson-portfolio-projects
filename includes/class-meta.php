@@ -34,7 +34,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Post_Meta' ) )
 
 		public function __construct()
 		{ 
-		//	add_action( 'init', array( &$this, 'register' ), 5 );
+			add_action( 'init', array( &$this, 'register' ), 5 );
 
 			add_filter( 'wp_kses_allowed_html', array( &$this, 'allow_multisite_tags' ), 1 );
 		}
@@ -52,16 +52,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Post_Meta' ) )
 			$video_formats = maxson_portfolio_get_video_formats();
 
 			$array = array( 
-				// Promoted
-				'_promoted'       => array( 
-				//	'sanitize_callback' => array( &$this, 'sanitize_checkbox' ), 
-					'auth_callback'     => '__return_true', 
-					'type'              => 'boolean', 
-					'description'       => __( '', 'maxson' ), 
-					'single'            => true, 
-					'show_in_rest'      => true
-				), 
-				'_promoted_label' => array( 
+				// Callout
+				'_callout'       => array( 
 				//	'sanitize_callback' => array( &$this, 'sanitize_text' ), 
 					'auth_callback'     => '__return_true', 
 					'type'              => 'string', 

@@ -14,13 +14,6 @@ if( ! defined( 'ABSPATH' ) )
 } // endif
 
 
-if( class_exists( 'Maxson_PP_Admin_List_Table_Portfolio_Projects', false ) )
-{ 
-	return;
-
-} // endif
-
-
 if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_List_Table', false ) )
 { 
 	include_once( 'abstract-class-admin-list-table.php' );
@@ -65,8 +58,8 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 		$new_project_label = esc_html__( 'Create your first project', 'maxson' );
 
 		echo '<div class="maxson-pp-blankstate">';
-			printf( '<h2 class="maxson-pp-blankstate-message">%1$s</h2>', __( 'Ready to showcase your projects?', 'maxson' ) );
-			echo '<div class="maxson-pp-blankstate-buttons">';
+			printf( '<h2 class="maxson-pp-blankstate--message">%1$s</h2>', __( 'Ready to showcase your projects?', 'maxson' ) );
+			echo '<div class="maxson-pp-blankstate--buttons">';
 
 				printf( '<a class="button button-primary maxson-pp-button maxson-pp-button-primary maxson-pp-button-large" href="%1$s">%2$s</a>', esc_url( $new_project_url ), $new_project_label );
 
@@ -83,7 +76,7 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 	protected function get_primary_column()
 	{ 
-		return 'project';
+		return 'name';
 	}
 
 
@@ -104,9 +97,9 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 		} else
 		{ 
 			// translators: %d: portfolio project ID
-			return array_merge( array( 
+			return array_merge( $actions, array( 
 				'id' => sprintf( __( 'ID:&nbsp;%d', 'maxson' ), $post->ID )
-			), $actions );
+			) );
 
 		} // endif
 	}
@@ -122,8 +115,7 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 	public function define_sortable_columns( $columns )
 	{ 
 		$custom_columns = array( 
-			'project'  => 'title', 
-			'promoted' => 'project_promoted'
+			'name'  => 'title'
 		);
 
 		return wp_parse_args( $custom_columns, $columns );
@@ -158,40 +150,25 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 		);
 
 
-		$show_columns          = array();
+		$show_columns = array();
 
+<<<<<<< Updated upstream
 		$show_columns['cb']      = '<input type="checkbox" />';
 		$show_columns['thumb']   = __( 'Thumbnail', 'maxson' );
 		$show_columns['project'] = __( 'Project', 'maxson' );
+=======
+		$show_columns['cb']   = '<input type="checkbox" />';
+		$show_columns['name'] = __( 'Project', 'maxson' );
+>>>>>>> Stashed changes
 
-		// This is displayed as an icon next to the project title, not as a column of data
-		if( maxson_portfolio_taxonomy_exists( 'type' ) &&
-			( false === apply_filters( 'maxson_portfolio_post_columns_show_project_type_as_icon', true ) ) )
-		{ 
-			$show_columns['taxonomy-portfolio_type'] = _x( 'Type', 'Admin post column name', 'maxson' );
-
-		} // endif
-
-		if( maxson_portfolio_taxonomy_exists( 'role' ) )
-		{
-			$show_columns['taxonomy-portfolio_role'] = _x( 'Roles', 'Admin post column name', 'maxson' );
-
-		} // endif
-
-		if( maxson_portfolio_taxonomy_exists( 'category' ) )
-		{
-			$show_columns['taxonomy-portfolio_category'] = _x( 'Categories', 'Admin post column name', 'maxson' );
-
-		} // endif
-
-		if( maxson_portfolio_taxonomy_exists( 'tag' ) )
-		{
-			$show_columns['taxonomy-portfolio_tag'] = _x( 'Tags', 'Admin post column name', 'maxson' );
-
-		} // endif
+		$show_columns['taxonomy-portfolio_type'] = _x( 'Type', 'Admin post column name', 'maxson' );
+		$show_columns['taxonomy-portfolio_role'] = _x( 'Roles', 'Admin post column name', 'maxson' );
+		$show_columns['taxonomy-portfolio_category'] = _x( 'Categories', 'Admin post column name', 'maxson' );
+		$show_columns['taxonomy-portfolio_tag'] = _x( 'Tags', 'Admin post column name', 'maxson' );
 
 		$show_columns['start_end'] = _x( 'Start/End Date', 'Admin post column name', 'maxson' );
 		$show_columns['client']    = _x( 'Client', 'Admin post column name', 'maxson' );
+		//$show_columns['callout']   = _x( 'Callout', 'Admin post type column name', 'maxson' );
 
 		if( post_type_supports( $this->list_table_type, 'author' ) )
 		{
@@ -207,17 +184,12 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 		$show_columns['date'] = _x( 'Date', 'Admin post type column name', 'maxson' );
 
-		if( maxson_portfolio_get_option( 'setup_promoted' ) )
-		{ 
-			$show_columns['promoted'] = sprintf( '<span class="comment-grey-bubble promoted-grey-star" data-tip="%1$s"></span><span class="column-label">%1$s</span>', _x( 'Promoted', 'Admin post type column name', 'maxson' ) );
-
-		} // endif
-
 		return array_merge( $show_columns, $columns );
 	}
 
 
 	/**
+<<<<<<< Updated upstream
 	 * Pre-fetch any data for the row each column has access to it
 	 * 
 	 * @param       int $post_id Post ID being shown
@@ -236,23 +208,22 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 
 	/**
+=======
+>>>>>>> Stashed changes
 	 * Render column: Name
 	 * 
 	 * @return      null
 	 */
 
-	protected function render_project_column()
+	protected function render_name_column( $post_id, $post )
 	{ 
-		global $post;
-		global $project;
-
-		$post_id    = $this->object->get_id();
-		$parent_id  = $this->object->get_parent_id();
+		$parent_id  = wp_get_post_parent_id( $post );
 		$archive_id = maxson_portfolio_get_archive_page_id();
 
 		$post_edit_link = get_edit_post_link( $post_id );
 		$post_title     = _draft_or_post_title();
 
+<<<<<<< Updated upstream
 		// Project Type
 		if( taxonomy_exists( 'portfolio_type' ) &&
 			( true === apply_filters( 'maxson_portfolio_post_columns_show_project_type_as_icon', true ) ) )
@@ -269,6 +240,8 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 		} // endif
 
+=======
+>>>>>>> Stashed changes
 
 		if( $parent_id > 0 && ( $archive_id !== $parent_id ) )
 		{ 
@@ -287,11 +260,26 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 		echo '</strong>';
 
 		get_inline_data( $post );
+	}
 
-		printf( '<div class="hidden portfolio-data" id="maxson_portfolio_project_inline_%1$s">', $post_id );
-			printf( '<div class="project-promoted">%1$s</div>',       $project->is_promoted() );
-			printf( '<div class="project-promoted-label">%1$s</div>', $project->get_promoted_label() );
-		echo '</div>';
+
+	/**
+	 * Render column: Start/End Date
+	 * 
+	 * @return      null
+	 */
+
+	protected function render_start_end_column( $post_id )
+	{ 
+		$date_args = array( 
+			'separator'    => '<br>', 
+			'before_start' => sprintf( '<span class="project-start-date"><em>%1$s</em> ', _x( 'Start: ', 'Post type column start date label', 'maxson' ) ), 
+			'before_end'   => sprintf( '<span class="project-end-date"><em>%1$s</em> ', _x( 'End: ', 'Post type column start date label', 'maxson' ) )
+		);
+
+		$date = maxson_project_data_start_end_date_html( $post_id, $date_args );
+
+		echo ( ! empty( $date ) ) ? $date : '<span class="na">&mdash;</span>';
 	}
 
 
@@ -332,20 +320,20 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 	 * @return      null
 	 */
 
-	protected function render_client_column()
+	protected function render_client_column( $post_id )
 	{ 
-		global $project;
-
-		$client = $project->get_client();
-		$url    = $project->get_url();
+		$text = maxson_project_data_client( $post_id );
+		$url  = maxson_project_data_url( $post_id );
 
 		if( ! empty( $client ) && ! empty( $url ) )
 		{ 
-			printf( '<a href="%1$s" target="_blank">%2$s</a>', $url, $client );
+			printf( '<a href="%1$s" target="_blank">%2$s</a>', esc_url( $url ), $text );
 
 		} elseif( ! empty( $url ) )
 		{ 
-			printf( '<a href="%1$s" target="_blank">%1$s</a>', $url );
+			$text = url_shorten( $url );
+
+			printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $url ), $text );
 
 		} elseif( ! empty( $client ) ) 
 		{ 
@@ -360,67 +348,22 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 
 
 	/**
-	 * Render column: Start/End Date
+	 * Render column: Callout
 	 * 
 	 * @return      null
 	 */
 
-	protected function render_start_end_column()
+	protected function render_callout_column( $post_id )
 	{ 
-		global $project;
+		$has_callout = maxson_project_data_has_callout( $post_id );
 
-		$date_args = array( 
-			'separator'    => '<br>', 
-			'before_start' => sprintf( '<span class="project-start-date"><em>%1$s</em> ', _x( 'Start: ', 'Post type column start date label', 'maxson' ) ), 
-			'before_end'   => sprintf( '<span class="project-end-date"><em>%1$s</em> ', _x( 'End: ', 'Post type column start date label', 'maxson' ) )
-		);
-
-		$date = $project->get_start_end_date_html( $date_args );
-
-		echo ( ! empty( $date ) ) ? $date : '<span class="na">&mdash;</span>';
-	}
-
-
-	/**
-	 * Render column: Promoted
-	 * 
-	 * @return      null
-	 */
-
-	protected function render_promoted_column()
-	{ 
-		global $project;
-
-		$post_id  = $this->object->get_id();
-		$user_can = current_user_can( 'edit_project', $post_id );
-
-		$is_promoted    = $project->is_promoted();
-		$promoted_label = $project->get_promoted_label();
-
-		if( $user_can )
+		if( $has_callout )
 		{ 
-			$nonce = wp_create_nonce( 'portfolio_projects_admin_column_promoted_nonce' );
+			echo maxson_project_data_callout_label( $post_id );
 
-			if( $is_promoted )
-			{ 
-				printf( '<a href="#update" class="icon-promoted" id="%1$s" data-nonce="%2$s" data-tip="%3$s">%3$s</a>', $post_id, $nonce, $promoted_label );
-
-			} else
-			{ 
-				printf( '<a href="#update" class="icon-promoted icon-not-promoted" id="%1$s" data-nonce="%2$s">%3$s</a>', $post_id, $nonce, $promoted_label );
-
-			} // endif
 		} else
 		{ 
-			if( $is_promoted )
-			{ 
-				printf( '<span class="icon-promoted" id="%1$s" data-tip="%2$s">%2$s</span>', $post_id, $promoted_label );
-
-			} else
-			{ 
-				printf( '<span class="icon-promoted icon-not-promoted" id="%1$s">%2$s</span>', $post_id, $promoted_label );
-
-			} // endif
+			echo '&ndash;';
 
 		} // endif
 	}

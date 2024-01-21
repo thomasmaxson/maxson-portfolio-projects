@@ -3,7 +3,8 @@
  * Fired when the plugin is uninstalled (not just deactivated but actively deleted through the WordPress Admin).
  */
 
-if( ! defined( 'WP_UNINSTALL_PLUGIN' ) || ! WP_UNINSTALL_PLUGIN || dirname( WP_UNINSTALL_PLUGIN ) != dirname( plugin_basename( __FILE__ ) ) )
+if( ! defined( 'WP_UNINSTALL_PLUGIN' ) || 
+	! WP_UNINSTALL_PLUGIN || dirname( WP_UNINSTALL_PLUGIN ) != dirname( plugin_basename( __FILE__ ) ) )
 { 
 	exit();
 
@@ -57,14 +58,7 @@ function maxson_portfolio_uninstall_plugin()
 		'maxson_portfolio_archive_limit', 
 		'maxson_portfolio_archive_order', 
 		'maxson_portfolio_archive_orderby', 
-		'maxson_portfolio_archive_thumbnail', 
-
-		'maxson_portfolio_setup_promoted', 
-		'maxson_portfolio_setup_duplicate', 
-		'maxson_portfolio_setup_taxonomy_category', 
-		'maxson_portfolio_setup_taxonomy_role', 
-		'maxson_portfolio_setup_taxonomy_tag', 
-		'maxson_portfolio_setup_taxonomy_type'
+		'maxson_portfolio_archive_thumbnail'
 	);
 
 

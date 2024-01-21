@@ -40,7 +40,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Meta_Boxes' ) )
 			add_action( 'add_meta_boxes', array( &$this, 'replace' ) );
 			add_action( 'add_meta_boxes', array( &$this, 'add' ) );
 
-			add_action( 'save_post', array( &$this, 'save_quick_edit_meta' ), 10, 2 );
 			add_action( 'save_post', array( &$this, 'save_post_meta' ), 1, 2 );
 
 			// Save meta: details
@@ -121,65 +120,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Meta_Boxes' ) )
 			$transients = maxson_portfolio_get_transients( 'all' );
 
 			maxson_portfolio_delete_transients( $transients );
-		}
-
-
-		/**
-		 * Quick edit saving
-		 * 
-		 * @param       int    $post_id
-		 * @param       object $post
-		 * 
-		 * @return      void
-		 */
-
-		public function save_quick_edit_meta( $post_id, $post )
-		{ 
-			if( empty( $post_id ) || empty( $post ) )
-			{
-				return;
-
-			} // endif
-
-			if( defined( 'DOING_AUTOSAVE' ) || is_int( wp_is_post_revision( $post ) ) || is_int( wp_is_post_autosave( $post ) ) )
-			{
-				return;
-
-			} // endif
-
-			if( self::POST_TYPE != $post->post_type )
-			{
-				return;
-
-			} // endif
-
-			if( ! current_user_can( 'edit_posts', $post_id ) )
-			{
-				return;
-
-			} // endif
-
-			// Check nonce
-			if( isset( $_REQUEST['maxson_portfolio_quick_edit_nonce'] ) )
-			{
-				if( ! wp_verify_nonce( $_REQUEST['maxson_portfolio_quick_edit_nonce'], 'maxson_portfolio_quick_edit_nonce' ) )
-					return $post_id;
-
-				if( isset( $_REQUEST['project_promoted_label'] ) )
-				{ 
-					if( ! empty( $_REQUEST['project_promoted_label'] ) )
-					{ 
-						update_post_meta( $post_id, '_promoted', true );
-						update_post_meta( $post_id, '_promoted_label', trim( $_REQUEST['project_promoted_label'] ) );
-
-					} else
-					{ 
-						delete_post_meta( $post_id, '_promoted' );
-						delete_post_meta( $post_id, '_promoted_label' );
-
-					} // endif
-				} // endif
-			} // endif
 		}
 
 
