@@ -29,7 +29,7 @@ if( ! defined( 'ABSPATH' ) )
 		 * maxson_portfolio_project_teaser_before_summary hook
 		 *
 		 * @hooked maxson_portfolio_template_teaser_thumbnail
-		 * @hooked maxson_portfolio_template_teaser_promoted_label
+		 * @hooked maxson_portfolio_template_teaser_callout_label
 		 */
 
 		do_action( 'maxson_portfolio_project_teaser_before_summary' ); ?>

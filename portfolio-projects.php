@@ -249,8 +249,11 @@ final class Maxson_Portfolio_Projects
 		include_once( "{$includes_folder}class-taxonomies.php" );
 
 		// Blocks
-		include_once( "{$blocks_folder}class-blocks.php"     );
-		include_once( "{$blocks_folder}portfolio/block.php"  );
+		include_once( "{$blocks_folder}class-blocks.php" );
+		include_once( "{$blocks_folder}class-block-portfolio-grid.php" );
+		include_once( "{$blocks_folder}class-block-portfolio-filter.php" );
+		include_once( "{$blocks_folder}class-block-portfolio-carousel.php" );
+		//include_once( "{$blocks_folder}class-block-portfolio-slide-image.php" );
 
 		// Admin Functions
 		include_once( "{$admin_folder}functions-admin.php"       );

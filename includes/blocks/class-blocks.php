@@ -38,6 +38,16 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Blocks' ) )
 
 
 		/**
+		 * 
+		 */
+
+		public static function register()
+		{ 
+			add_filter( 'block_categories_all', array( __CLASS__, 'add_category' ) );
+		}
+
+
+		/**
 		 * Adds a custom category to the block inserter
 		 * 
 		 * @param       array $categories Array of categories
@@ -53,16 +63,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Blocks' ) )
 			) );
 
 			return $categories;
-		}
-
-
-		/**
-		 * Initialize new npm install @wordpress/scripts --save-devcategory
-		 */
-
-		public static function register()
-		{ 
-			add_filter( 'block_categories_all', array( __CLASS__, 'add_category' ) );
 		}
 
 	} // endclass

@@ -16,6 +16,4 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
-
-echo $project->get_title( '<h1 itemprop="name" class="h1 entry-title project-title">', '</h1>' );
+the_title( '<h1 itemprop="name" class="h1 entry-title project-title">', '</h1>' );

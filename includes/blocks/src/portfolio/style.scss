@@ -1,0 +1,59 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-maxson-portfolio-projects-portfolio {	
+	padding: 0;
+	margin: 0;
+}
+
+ul.wp-block-portfolio-archive { 
+	display: grid;
+	gap: var( --wp--style--block-gap, 1rem );
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+
+	@for $i from 2 through 6 { 
+		&.portfolio-grid-columns-#{ $i } {
+			grid-template-columns: repeat(#{ $i }, 1fr);
+		}
+	}
+
+	li { 
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		border: 1px solid #999;
+		overflow: hidden;
+	}
+}
+
+
+.project-teaser { 
+	position: relative;
+
+	.entry-link { text-decoration: none;}
+
+	.entry-callout-label { 
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 5px;
+		color: var( --portfolio-project-callout-color-text, var( --wp--preset--color--base, #fff ) );
+		font-size: 80%;
+		background-color: var( --portfolio-project-callout-color-bg, var( --wp--preset--color--contrast, #000 ) );
+	}
+
+	.entry-summary { padding: 1rem;}
+
+	.entry-title { margin: 0;}
+
+	.entry-meta { 
+		margin: 0;
+		margin-top: 1rem;
+	}
+}

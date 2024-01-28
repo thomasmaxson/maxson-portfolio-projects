@@ -1,0 +1,92 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "maxson-portfolio-projects/project-carousel",
+  "description": "Display your project images in a sliding carousel",
+  "version": "1.0.0",
+  "title": "Project Carousel",
+  "keywords": [
+    "gallery",
+    "slideshow",
+    "slider",
+    "slides"
+  ],
+  "category": "portfolioprojects",
+  "icon": "slides",
+  "attributes": {
+    "images": {
+      "type": "array",
+      "default": [],
+      "source": "query",
+      "selector": ".carousel-slide",
+      "query": {
+        "url": {
+          "type": "string",
+          "source": "attribute",
+          "selector": "img",
+          "attribute": "src"
+        },
+        "link": {
+          "source": "attribute",
+          "selector": "img",
+          "attribute": "data-link"
+        },
+        "alt": {
+          "source": "attribute",
+          "selector": "img",
+          "attribute": "alt",
+          "default": ""
+        },
+        "id": {
+          "type": "number",
+          "source": "attribute",
+          "selector": "img",
+          "attribute": "data-id"
+        },
+        "caption": {
+          "type": "string",
+          "source": "html",
+          "selector": "figcaption"
+        }
+      }
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "pauseOnHover": {
+      "type": "boolean",
+      "default": false
+    },
+    "effect": {
+      "type": "string",
+      "default": "fade"
+    },
+    "showNavigation": {
+      "type": "boolean",
+      "default": false
+    },
+    "showPagination": {
+      "type": "boolean",
+      "default": false
+    },
+    "speed": {
+      "type": "string",
+      "default": "300"
+    }
+  },
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "textdomain": "maxson",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

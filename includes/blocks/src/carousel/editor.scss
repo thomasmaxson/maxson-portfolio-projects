@@ -1,0 +1,103 @@
+// /**
+//  * The following styles get applied inside the editor only.
+//  *
+//  * Replace them with your own styles or remove the file completely.
+//  */
+
+.wp-block-maxson-portfolio-projects-project-carousel { 
+	--block-space-var: var( --wp--style--block-gap );
+	--block-space-default: 18px;
+	--block-space: var( --block-space-var, var( --block-space-default ) );
+
+	--block-space-half-var: calc( var( --wp--style--block-gap ) / 2 );
+	--block-space-half-default: calc( 18px / 2 );
+	--block-space-half: var( --block-space-half-var, var( --block-space-half-default ) );
+
+	display: flex;
+	flex-wrap: wrap;
+	list-style-type: none;
+	padding-left: 0;
+	padding-right: 0;
+	margin: 0;
+	column-gap: var( --block-space );
+
+	.block-carousel-slide { 
+		position: relative;
+		display: flex;
+		flex-grow: 1;
+		flex-direction: column;
+		justify-content: center;
+		margin: var( --block-space-half ) 0;
+
+		figure {
+			margin: 0;
+			height: 100%;
+						
+			// IE doesn't support flex so omit that.
+			@supports (position: sticky) {
+				display: flex;
+				align-items: flex-end;
+				justify-content: flex-start;
+			}
+		}
+
+		img {
+			display: block;
+			// IE doesn't handle cropping, so we need an explicit width here.
+			width: 100%;
+			max-width: 100%;
+			height: auto;
+
+			// IE11 doesn't read rules inside this query. They are applied only to modern browsers.
+			@supports (position: sticky) {
+				width: auto;
+			}
+		}
+	}
+
+	// Responsive fallback value, 2 columns
+	& .block-carousel-slide {
+		width: calc(100% / 2 - 16px);
+	}
+
+		
+	// Apply max-width to floated items that have no intrinsic width
+	[data-align="left"] &,
+	[data-align="right"] &,
+	&.alignleft,
+	&.alignright {
+		max-width: 636px / 2;
+		width: 100%;
+	}
+
+
+	.block-carousel-slide--action-remove, 
+	.block-carousel-slide--action-reorder { 
+	    position: absolute;
+	    top: -2px;
+	    display: none;
+	    margin: var( --block-space-var );
+	}
+
+	.block-carousel-slide--action-remove { right: 0;}
+
+	.block-carousel-slide--action-remove, 
+	.block-carousel-slide--action-move-forward, 
+	.block-carousel-slide--action-move-backward { 
+		border: 1px solid #1e1e1e;
+	    border-radius: 2px;
+	    background: #fff;
+	    transition: box-shadow .2s ease-out;
+	    z-index: 20;
+	}
+
+	&.is-selected { 
+		.block-carousel-slide--action-remove, 
+		.block-carousel-slide--action-reorder { 
+			display: inline-flex;
+		}
+	}
+
+	//     color: #fff;
+	//     background-color: var(--wp-admin-theme-color, #00669b);
+}

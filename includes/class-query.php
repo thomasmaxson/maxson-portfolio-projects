@@ -443,15 +443,16 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Query' ) )
 
 		public function require_thumbnail_meta_query()
 		{ 
-			$option = maxson_portfolio_get_option( 'archive_thumbnail' );
-			$query  = array();
-
-			if( ! empty( $option ) )
+			if( filter_input( INPUT_GET, 'require_thumbnail' ) )
 			{ 
 				$query = array( 
 					'key'     => '_thumbnail_id', 
 					'compare' => 'EXISTS'
 				);
+
+			} else
+			{ 
+				$query = array();
 
 			} // endif
 

@@ -14,12 +14,19 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
+$project_id = get_the_ID();
 
-$client = $project->get_client();
-$url    = $project->get_url();
-$dates  = $project->get_start_end_date_html();
-$tags   = $project->get_tags( '</li><li>', '<li>', '</li>', false );
+$client = maxson_project_get_client( $project_id );
+$url    = maxson_project_get_url( $project_id );
+$dates  = maxson_project_get_start_end_date_html( $project_id );
+$tags   = maxson_project_get_tags( $project_id, array( 
+	'link'       => false, 
+	'separator'  => '</li><li>', 
+	'before'     => '<ul class="project-tags">', 
+	'after'      => '</ul>', 
+	'beforeitem' => '<li>', 
+	'afteritem'  => '</li>'
+);
 
 if( ! empty( $client ) || ! empty( $url ) || ! empty( $dates ) )
 { ?>
@@ -47,7 +54,7 @@ if( ! empty( $client ) || ! empty( $url ) || ! empty( $dates ) )
 
 			if( ! empty( $tags ) )
 			{
-				printf(  '<li><strong>%1$s</strong> <ul class="project-tags">%2$s</ul></li>', __( 'Tagged: ', 'maxson' ), $tags );
+				printf(  '<li><strong>%1$s</strong> %2$s</li>', __( 'Tagged: ', 'maxson' ), $tags );
 
 			} // endif
 

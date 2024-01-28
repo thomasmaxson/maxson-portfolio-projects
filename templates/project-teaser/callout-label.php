@@ -19,7 +19,7 @@ if( ! defined( 'ABSPATH' ) )
 
 if( maxson_project_has_callout() )
 { ?>
-	<div class="entry-promoted-label">
+	<div class="entry-callout-label">
 		<?php echo maxson_project_get_callout_label(); ?>
 	</div>
 

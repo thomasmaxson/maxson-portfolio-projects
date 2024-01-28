@@ -17,12 +17,10 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
-
-if( $project->is_promoted() )
+if( maxson_project_has_callout() )
 { ?>
-	<div class="entry-promoted-label">
-		<?php echo $project->get_promoted_label(); ?>
+	<div class="entry-callout-label">
+		<?php echo maxson_project_get_callout_label(); ?>
 	</div>
 
 <?php } // endif ?>

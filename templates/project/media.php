@@ -14,9 +14,3 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
-global $project;
-
-?>
-<div class="media">
-	<?php echo $project->get_media(); ?>
-</div>
