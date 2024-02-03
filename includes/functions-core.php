@@ -148,6 +148,8 @@ function maxson_portfolio_get_option( $key = null, $default = false )
 
 	$value = get_option( "maxson_portfolio_{$key}", $default );
 
+	//var_dump( $value );
+
 	if( empty( $value ) )
 	{
 		$value = $default;

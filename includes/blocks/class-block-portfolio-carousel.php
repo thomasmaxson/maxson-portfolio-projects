@@ -65,24 +65,22 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Project_Carousel' ) )
 		 * Render custom block
 		 */
 
-		function render_block( $attributes, $content, $block_class )
+		function render_block( $attributes, $content, $block )
 		{ 
+			$output = '';
+
 			ob_start();
 
-			?>
-			<div <?php echo get_block_wrapper_attributes(); ?>>
+			maxson_portfolio_template( 'project/gallery.php', array( 
+				'block'      => $block, 
+				'attributes' => $attributes
+			) );
 
-			<div  class="splide"  data-interval="<?php echo $attributes["interval"] ?>">
-				<div class="splide__track">
-					<ul class="splide__list">
-						<?php echo $content; ?>
-					</ul>
-				</div>
-			</div>
+			$output .= ob_get_contents();
 
-			<?php
+			ob_end_clean();
 
-			return ob_get_clean();
+			return $output;
 		}
 
 	} // endclass

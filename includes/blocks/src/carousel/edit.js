@@ -1,14 +1,14 @@
-// https://github.com/stellarwp/kadence-blocks/blob/master/src/blocks/advancedgallery/edit.js
-// https://github.com/Impuls-Werbeagentur/impuls-slick-slider-block/blob/master/impuls-slick-slider-block/blocks/src/slick-slider-block/edit.js
-
-
 /**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
 
-import { __ } from '@wordpress/i18n';
+import {
+	__,
+	_x,
+	sprintf
+} from '@wordpress/i18n';
 
 
 /**
@@ -41,6 +41,17 @@ import {
 } from '@wordpress/element';
 
 
+import {
+	useDispatch,
+	useSelect
+} from '@wordpress/data';
+
+
+import {
+	store as noticesStore
+} from '@wordpress/notices';
+
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -55,6 +66,8 @@ import './editor.scss';
  * External Dependencies
  */
 
+import classnames from 'classnames';
+
 import { filter, get, pick } from 'lodash';
 
 
@@ -66,39 +79,90 @@ import CarouselImage from './edit-image';
 
 
 const effectOptions = [
-	{ value: 'fade', label: __( 'Fade', 'maxson' ) },
-	{ value: 'scroll', label: __( 'Scroll', 'maxson' ) }
+	{ value: 'fade', label: _x( 'Fade', 'Carousel transition type', 'maxson' ) },
+	{ value: 'scroll', label: _x( 'Scroll', 'Carousel transition type', 'maxson' ) }
 ];
-
-const slideResolutionOptions = [];
 
 const ALLOWED_MEDIA_TYPES = [ 'image' ];
 
-import useImageSizes from './use-image-sizes';
 
-
-// export const pickRelevantMediaFiles = ( image, 'large' ) => {
-// 	const imageProps = pick( image, [ 'alt', 'id', 'link', 'caption' ] );
-
-// 	imageProps.src = get( image, [ 'sizes', 'large', 'url' ] ) || get( image, [ 'media_details', 'sizes', 'large', 'source_url' ] ) || image.url;
-
-// 	return imageProps;
-// };
-
-export const pickRelevantMediaFiles = ( image, size ) => {
+const pickRelevantMediaFiles = ( image, imageSize = "project_large" ) => {
 	const imageProps = Object.fromEntries(
 		Object.entries( image ?? {} ).filter( ( [ key ] ) =>
-			[ 'alt', 'id', 'link', 'caption' ].includes( key )
+			[ 'id', 'alt', 'caption', 'title' ].includes( key )
 		)
 	);
 
 	imageProps.url =
-		image?.sizes?.[ size ]?.url ||
-		image?.media_details?.sizes?.[ size ]?.source_url ||
+		image?.sizes?.[ imageSize ]?.url ||
+		image?.media_details?.sizes?.[ imageSize ]?.source_url ||
 		image.url;
 
-		return imageProps;
+	const urlFull = 
+		image?.imageSize?.full?.url || 
+		image?.media_details?.imageSize?.full?.source_url;
+
+	if( urlFull )
+	{ 
+		imageProps.urlFull = urlFull;
+
+	} // endif
+
+	return imageProps;
 };
+
+
+const getRelevantMediaFiles = async ( currentImages, imageSize = "project_large" ) => { 
+	return await Promise.all( 
+		currentImages.map( async ( image ) => { 
+			const imageId = parseInt( image.id );
+			let theImage = await wp.data.select( 'core' ).getMedia( imageId );
+			//let theImage = await wp.data.select( 'core' ).getEntityRecords( 'postType', 'attachment', { include : image.id } );
+
+			if( ! theImage ) { 
+				theImage = image;
+			}
+
+			const imageProps = pick( theImage, [ 'id', 'link' ] );
+
+			imageProps.alt = 
+				get( theImage, [ 'alt_text' ] ) || 
+				get( theImage, [ 'alt' ] ) || undefined;
+
+			imageProps.caption = 
+				get( theImage, [ 'caption' ] ) || 
+				get( theImage, [ 'caption', 'raw' ] ) || undefined;
+
+			imageProps.url = 
+				get( theImage, [ 'media_details', 'sizes', imageSize, 'source_url' ] ) || 
+				get( theImage, [ 'sizes', imageSize, 'url' ] ) || 
+				theImage.source_url;
+
+			const urlFull = 
+				theImage?.imageSize?.full?.url || 
+				theImage?.media_details?.imageSize?.full?.source_url;
+
+			if( urlFull )
+			{ 
+				imageProps.urlFull = urlFull;
+
+			} // endif
+
+			const urlThumb = 
+				theImage?.imageSize?.thumbnail?.url || 
+				theImage?.media_details?.imageSize?.thumbnail?.source_url;
+
+			if( urlThumb )
+			{ 
+				imageProps.urlThumb = urlThumb;
+
+			} // endif
+
+			return imageProps;
+		} )
+	);
+};
+
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -116,24 +180,68 @@ export default function Edit(
 		setAttributes
 	} ) {
 
-		const { images, autoplay, effect, pauseOnHover, showNavigation, showPagination, imageResolution, speed } = attributes;
+		const { 
+			images, 
+			autoplay, 
+			pauseOnAction, 
+			pauseOnHover, 
+			speed, 
+			effect, 
+			showNavigation, 
+			showPagination, 
+			imageResolution, imageCrop } = attributes;
 
-		const [ selectedImage, setSelectedImage ] = useState( null );
+		let [ selectedImage, setSelectedImage ] = useState( null );
 
-		const blockProps = useBlockProps();
-	
-		if( images.length > 0 ) {
-			imageResolutionOptions = useImageSizes(
-				images[0],
-				false,
-				getSettings()
-			);
-		} // endif
+		const { createSuccessNotice, createErrorNotice } = useDispatch( noticesStore );
+
+
+		const blockProps = useBlockProps( { 
+			"className" : classnames( { 
+				'is-cropped' : imageCrop
+			} )
+		} );
+
+
+		const imageResolutionOptions = wp.data.select( 'core/block-editor' ).getSettings().imageSizes.map( ( { name, slug } ) => ( { 
+			value: slug, 
+			label: name
+		} ) );
+
+
+		const onResolutionChange = async ( imageSize ) => {
+			setAttributes( { imageResolution: imageSize } );
+
+			try {
+				const imageData = await getRelevantMediaFiles( images, imageSize );
+				const imageSizeData = imageResolutionOptions.find( ( size ) => size.value === imageSize );
+
+				setAttributes( { images: imageData } );
+
+				createSuccessNotice( 
+					sprintf( __( 'All carousel image sizes updated to: %s', 'maxson' ), imageSizeData.label ),
+					{
+						id: 'maxson-portfolio-carousel-attributes-imageSize',
+						type: 'snackbar'
+					}
+				)
+			} catch ( error )
+			{ 
+				console.error( error );
+
+			};
+		}
+
 
 		const OnMediaSelect = ( images ) => {
-			const imageData = images.map( ( image ) => pickRelevantMediaFiles( image, 'project_large' ) )
-			
-			setAttributes( { images: imageData } );
+			const imageData = images.map( ( image ) => pickRelevantMediaFiles( image, imageResolution ) )
+
+			setAttributes( { 
+				ids: images.map( ( image ) => { 
+					return image.id 
+				} ),
+				images: imageData
+			} );
 		}
 
 
@@ -148,7 +256,7 @@ export default function Edit(
 
 		const OnImageRemove = ( index ) => {
 			return () => {
-				const images = filter( attributes.images, ( img, i ) => index !== i );
+				const images = filter( attributes.images, ( image, i ) => index !== i );
 
 				selectedImage = null;
 
@@ -173,6 +281,7 @@ export default function Edit(
 			if ( oldIndex === images.length - 1 ) {
 				return;
 			}
+
 			onImageMove( oldIndex, oldIndex + 1 );
 		}
 
@@ -181,25 +290,8 @@ export default function Edit(
 			if ( oldIndex === 0 ) {
 				return;
 			}
+
 			onImageMove( oldIndex, oldIndex - 1 );
-		}
-
-
-		const setImageAttributes = ( index, attrs ) => {
-			const { images } = attributes;
-			if ( ! images[ index ] ) {
-				return;
-			}
-			setAttributes( { 
-				images: [ 
-					...images.slice( 0, index ),
-					{
-						...images[ index ],
-						...attrs,
-					},
-					...images.slice( index + 1 ),
-				],
-			} );
 		}
 	
 
@@ -207,6 +299,14 @@ export default function Edit(
 	        setAttributes( {
 	            images: []
 	        } );
+
+			createSuccessNotice( 
+				__( 'All carousel images removed', 'maxson' ),
+				{
+					id: 'maxson-portfolio-carousel-images-removed',
+					type: 'snackbar'
+				}
+			);
 	    }
 
 
@@ -245,7 +345,7 @@ export default function Edit(
 											allowedTypes={ ALLOWED_MEDIA_TYPES }
 											multiple
 											gallery
-											value={ images.map( ( img ) => img.id ) }
+											value={ images.map( ( image ) => image.id ) }
 											render={ ( { open } ) => (
 												<>
 													<Button
@@ -273,7 +373,7 @@ export default function Edit(
 
 
 				<InspectorControls>
-					<PanelBody title={ __( 'Carousel Settings', 'maxson' ) }>
+					<PanelBody title={ __( 'Carousel Settings', 'maxson' ) } initialOpen={ true }>
 						<ToggleControl
 							label={ __( 'Autoplay', 'maxson' ) }
 							checked={ !! autoplay }
@@ -281,6 +381,16 @@ export default function Edit(
 								setAttributes( { autoplay: value } );
 							} }
 						/>
+						{ autoplay ?
+							<ToggleControl
+								label={ __( 'Pause on action', 'maxson' ) }
+								checked={ !! pauseOnAction }
+								onChange={ ( value ) => {
+									setAttributes( { pauseOnAction: value } );
+								} }
+							/>
+						 	: ''
+						}
 						{ autoplay ?
 							<ToggleControl
 								label={ __( 'Pause on hover', 'maxson' ) }
@@ -291,20 +401,6 @@ export default function Edit(
 							/>
 						 	: ''
 						}
-						<ToggleControl
-							label={ __( 'Show Navigation', 'maxson' ) }
-							checked={ !! showNavigation }
-							onChange={ ( value ) => {
-								setAttributes( { showNavigation: value } );
-							} }
-						/>
-						<ToggleControl
-							label={ __( 'Show Pagination', 'maxson' ) }
-							checked={ !! showPagination }
-							onChange={ ( value ) => {
-								setAttributes( { showPagination: value } );
-							} }
-						/>
 						<TextControl
 							label={ __( 'Speed', 'maxson' ) }
 							type='number'
@@ -323,30 +419,62 @@ export default function Edit(
 							} }
 							options={ effectOptions }
 						/>
+					</PanelBody>
 
-						{ slideResolutionOptions?.length > 0 && (
+					<PanelBody title={ __( 'Carousel Controls', 'maxson' ) } initialOpen={ false }>
+						<ToggleControl
+							label={ __( 'Show Navigation', 'maxson' ) }
+							checked={ !! showNavigation }
+							onChange={ ( value ) => {
+								setAttributes( { showNavigation: value } );
+							} }
+						/>
+						<ToggleControl
+							label={ __( 'Show Pagination', 'maxson' ) }
+							checked={ !! showPagination }
+							onChange={ ( value ) => {
+								setAttributes( { showPagination: value } );
+							} }
+						/>
+					</PanelBody>
+
+					{ imageResolutionOptions?.length > 0 && (
+						<PanelBody title={ __( 'Image Settings', 'maxson' ) } initialOpen={ false }>
 							<SelectControl
-								label={ __( 'Slide Resolution', 'maxson' ) }
+								label={ __( 'Image Resolution', 'maxson' ) }
 								help={ __( 'Select the size of the source images.', 'maxson' ) }
 								value={ imageResolution }
 								options={ imageResolutionOptions }
-								//onChange={ updateImagesSize }
-								hideCancelButton={ true }
-								//size="__unstable-large"
+								onChange={ ( value ) => { 
+									onResolutionChange( value );
+								} }
 							/>
-						) }
-					</PanelBody>
+
+							<ToggleControl
+								label={ __( 'Crop Image', 'maxson' ) }
+								help={ ( imageCrop ) => { 
+									return !! imageCrop
+									? __( 'Images are cropped to align.', 'maxson' )
+									: __( 'Images are not cropped.', 'maxson' );
+								} }
+								checked={ !! imageCrop }
+								onChange={ ( value ) => {
+									setAttributes( { imageCrop: value } );
+								} }
+							/>
+						</PanelBody>
+					) }
 				</InspectorControls>
 				
-				<div {...blockProps} >
-					{ images.map( ( img, index ) => {	
+				<div {...blockProps}>
+					{ images.map( ( image, index ) => {	
 						return (
-							<div className="block-carousel-slide" key={ img.id || img.url }>
+							<div className="block-carousel-slide" key={ image.id || image.url }>
 								<CarouselImage
-									url={ img.url }
-									alt={ img.alt }
-									id={ img.id }
-									caption={ img.caption }
+									url={ image.url }
+									alt={ image.alt }
+									id={ image.id }
+									caption={ image.caption }
 									onSelect={ OnImageSelect( index ) }
 									onRemove={ OnImageRemove( index ) }
 									isSelected={ isSelected }
@@ -361,6 +489,7 @@ export default function Edit(
 									}
 									isFirstItem={ index === 0 }
 									isLastItem={ ( index + 1 ) === images.length }
+									imageCount={ images.length || 0 }
 								/>
 							</div>
 						);

@@ -27,7 +27,11 @@
 		flex-grow: 1;
 		flex-direction: column;
 		justify-content: center;
-		margin: var( --block-space-half ) 0;
+		border: 1px solid #e0e0e0;
+		margin: 0 0 var( --block-space ) 0;
+
+		// Responsive fallback value, 2 columns
+		width: calc(100% / 2 - var( --block-space ) );
 
 		figure {
 			margin: 0;
@@ -36,8 +40,8 @@
 			// IE doesn't support flex so omit that.
 			@supports (position: sticky) {
 				display: flex;
-				align-items: flex-end;
-				justify-content: flex-start;
+				align-items: center;
+				justify-content: center;
 			}
 		}
 
@@ -55,11 +59,13 @@
 		}
 	}
 
-	// Responsive fallback value, 2 columns
-	& .block-carousel-slide {
-		width: calc(100% / 2 - 16px);
-	}
 
+	&.is-cropped .block-carousel-slide img { 
+		flex: 1 0 0%;
+		height: 100%;
+		object-fit: cover;
+		width: 100%;
+	}
 		
 	// Apply max-width to floated items that have no intrinsic width
 	[data-align="left"] &,
@@ -79,7 +85,15 @@
 	    margin: var( --block-space-var );
 	}
 
-	.block-carousel-slide--action-remove { right: 0;}
+	.block-carousel-slide--action-reorder { 
+		left: 0;
+		align-items: flex-start;
+	}
+
+	.block-carousel-slide--action-remove { 
+		right: 0;
+		align-items: flex-end;
+	}
 
 	.block-carousel-slide--action-remove, 
 	.block-carousel-slide--action-move-forward, 
@@ -97,7 +111,4 @@
 			display: inline-flex;
 		}
 	}
-
-	//     color: #fff;
-	//     background-color: var(--wp-admin-theme-color, #00669b);
 }

@@ -139,7 +139,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Media' ) )
 
 		public function media_names( $size_names )
 		{ 
-			if( false !== apply_filters( 'maxson_portfolio_add_media_manager_image_sizes', true ) )
+			if( true === apply_filters( 'maxson_portfolio_add_media_manager_image_sizes', true ) )
 			{ 
 				$new_sizes = array( 
 					'project_thumbnail' => _x( 'Project Thumbnail', 'Media size image name', 'maxson' ), 

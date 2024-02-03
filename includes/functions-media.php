@@ -103,47 +103,6 @@ function maxson_portfolio_placeholder_image( $type = null, $size = array( 60, 60
 }
 
 
-if( ! function_exists( 'maxson_portfolio_get_term_thumbnail' ) )
-{ 
-	/**
-	 * Get term thumbnail HTML
-	 * 
-	 * @param       int     $term_id
-	 * @param       string  $size
-	 * @param       array   $args
-	 * @return      string
-	 */
-
-	function maxson_portfolio_get_term_thumbnail( $term_id = null, $size = 'project_thumbnail', $args = array() )
-	{ 
-		if( ! is_null( $term_id ) && ! is_wp_error( $term_id ) )
-		{ 
-			if( is_object( $term_id ) )
-			{
-				$term_id = $term_id->term_id;
-
-			} // endif
-
-			$thumbnail_id = get_term_meta( $term_id, '_thumbnail_id', true );
-
-			if( $thumbnail_id && maxson_portfolio_attachment_exists( $thumbnail_id ) )
-			{ 
-				return wp_get_attachment_image( $thumbnail_id, $size, $args );
-
-			} else
-			{ 
-				return false;
-
-			} // endif
-		} else
-		{ 
-			return false;
-
-		} // endif
-	}
-}
-
-
 /**
  * Get a image size
  * 
@@ -163,9 +122,9 @@ function maxson_portfolio_get_media_sizes( $size = 'thumbnail' )
 
 	} elseif( in_array( $size, array( 'thumbnail', 'medium', 'large' ) ) )
 	{ 
-		$option_w = maxson_portfolio_get_option( "media_{$size}_width", '300' );
-		$option_h = maxson_portfolio_get_option( "media_{$size}_height", '300' );
-		$option_c = maxson_portfolio_get_option( "media_{$size}_crop", false );
+		$option_w = maxson_portfolio_get_option( "media_size_{$size}_width", '300' );
+		$option_h = maxson_portfolio_get_option( "media_size_{$size}_height", '300' );
+		$option_c = maxson_portfolio_get_option( "media_size_{$size}_crop", false );
 
 	} else 
 	{ 

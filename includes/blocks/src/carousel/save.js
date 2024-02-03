@@ -18,45 +18,46 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 export default function save( { attributes } ) {
 
-	const { images, imageCrop, autoplay, pauseOnHover, arrows, dots, speed, effect, linkTo, target, adaptiveHeight } = attributes;
+	const { images, autoplay, pauseOnAction, pauseOnHover, speed, effect, showNavigation, showPagination, imageCrop } = attributes;
 
-	let blockProps = useBlockProps.save( {
+	let blockProps = useBlockProps.save( { 
 		className: imageCrop ? 'is-cropped' : '',
 		'data-autoplay': autoplay,
 		'data-speed': speed,
 		'data-effect': effect,
-		'data-arrows': arrows,
-		'data-dots': dots
+		'data-arrows': showNavigation,
+		'data-dots': showPagination
 	} )
 
-	// v2.0
-	if ( adaptiveHeight ) blockProps = { ...blockProps, 'data-adaptiveHeight': adaptiveHeight }
-	if ( pauseOnHover ) blockProps = { ...blockProps, 'data-pauseOnHover': pauseOnHover }
-	
+	if( autoplay && pauseOnAction )
+	{ 
+		blockProps = { ...blockProps, 'data-pauseOnAction': pauseOnHover }
+	}
+
+	if( autoplay && pauseOnHover )
+	{ 
+		blockProps = { ...blockProps, 'data-pauseOnHover': pauseOnHover }
+	}
+
 
 	return (
 		<ul { ...blockProps }>
-			{ images.map( ( image ) => {
-				let href;
-
-				switch ( linkTo ) {
-					case 'media':
-						href = image.src;
-						break;
-					case 'attachment':
-						href = image.link;
-						break;
-					case 'url':
-						href = image.link;
-						break;
-				}
-
-				const img = <img src={ image.src } alt={ image.alt } data-id={ image.id } data-link={ image.link } className={ image.id ? `wp-image-${ image.id }` : null } />;
+			{ images.map( ( image ) => { 
+				const img = <img 
+					src={ image.url } 
+					className={ image.id ? `wp-image-${ image.id }` : null } 
+					alt={ image.alt } 
+					title={ image.title } 
+					data-url-full={ image.urFull } 
+					data-url={ image.url } 
+					data-id={ image.id } 
+					data-link={ image.link } 
+				/>;
 
 				return (
 					<li key={ image.id || image.url } className="carousel-slide">
 						<figure>
-							{ href ? <a href={ href } target={ target ? '_blank' : '_self' } rel="noopener">{ img }</a> : img }
+							{ img }
 							{ image.caption && image.caption.length > 0 && (
 								<figcaption>{ image.caption }</figcaption>
 							) }

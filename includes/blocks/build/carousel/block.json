@@ -18,29 +18,25 @@
       "type": "array",
       "default": [],
       "source": "query",
-      "selector": ".carousel-slide",
+      "selector": ".carousel-slide img",
       "query": {
         "url": {
           "type": "string",
           "source": "attribute",
-          "selector": "img",
           "attribute": "src"
         },
         "link": {
           "source": "attribute",
-          "selector": "img",
           "attribute": "data-link"
         },
         "alt": {
           "source": "attribute",
-          "selector": "img",
           "attribute": "alt",
           "default": ""
         },
         "id": {
           "type": "number",
           "source": "attribute",
-          "selector": "img",
           "attribute": "data-id"
         },
         "caption": {
@@ -50,9 +46,17 @@
         }
       }
     },
+    "ids": {
+      "type": "array",
+      "default": []
+    },
     "autoplay": {
       "type": "boolean",
       "default": true
+    },
+    "pauseOnAction": {
+      "type": "boolean",
+      "default": false
     },
     "pauseOnHover": {
       "type": "boolean",
@@ -73,6 +77,14 @@
     "speed": {
       "type": "string",
       "default": "300"
+    },
+    "imageResolution": {
+      "type": "string",
+      "default": "project_large"
+    },
+    "imageCrop": {
+      "type": "boolean",
+      "default": false
     }
   },
   "example": {},

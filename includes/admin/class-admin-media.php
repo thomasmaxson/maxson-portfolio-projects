@@ -35,9 +35,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 		public function __construct()
 		{ 
 			add_action( 'admin_init', array( &$this, 'register' ) );
-			add_filter( 'upload_dir', array( &$this, 'upload_dir' ) );
-
-			$this->create_directory();
 		}
 
 
@@ -176,82 +173,6 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Admin_Media_Settings' ) )
 				printf( '<p class="description">%1$s</p>', __( 'This portfolio image size has been disabled because its values are being overwritten by a filter.', 'maxson' ) );
 
 			} // endif
-		}
-
-
-		/** 
-		 * Change Upload Directory for plugin specific post-type
-		 * 
-		 * @param       array $dir
-		 * @return      array
-		 */
-
-		public function upload_dir( $dir )
-		{ 
-			if( isset( $_REQUEST['action'] ) && 'upload-attachment' == $_REQUEST['action'] )
-			{ 
-				if( isset( $_REQUEST['post_id'] ) )
-				{ 
-					$post_parent_id = get_post( $_REQUEST['post_id'] )->post_parent;
-
-					if( self::POST_TYPE == get_post_type( $_REQUEST['post_id'] ) || self::POST_TYPE == get_post_type( $post_parent_id ) )
-					{ 
-						$upload_folder = Portfolio_Projects()->upload_folder();
-
-						if( empty( $dir['subdir'] ) )
-						{ 
-							$dir['path']   = path_join( $dir['basedir'], $upload_folder );
-							$dir['url']    = path_join( $dir['baseurl'], $upload_folder );
-							$dir['subdir'] = "/{$upload_folder}";
-
-						} else
-						{ 
-							$new_subdir = "/{$upload_folder}{$dir['subdir']}";
-
-							$dir['path']   = str_replace( $dir['subdir'], $new_subdir, $dir['path'] );
-							$dir['url']    = str_replace( $dir['subdir'], $new_subdir, $dir['url'] );
-							$dir['subdir'] = str_replace( $dir['subdir'], $new_subdir, $dir['subdir'] );
-
-						} // endif
-					} // endif
-				} // endif
-			} // endif
-
-			return $dir;
-		}
-
-
-		/**
-		 * Install directories and files for uploading files
-		 * 
-		 * @return      void
-		 */
-
-		private function create_directory()
-		{ 
-			$wp_upload_dir = wp_upload_dir();
-			$upload_folder = Portfolio_Projects()->upload_folder();
-
-			$files = array( 
-				array( 
-					'base'    => trailingslashit( $wp_upload_dir['basedir'] ) . $upload_folder, 
-					'file'    => 'index.php', 
-					'content' => "<?php \r\r// Silence is Golden\r\r?>"
-				)
-			);
-
-			foreach( $files as $file )
-			{ 
-				if( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) )
-				{ 
-					if( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) )
-					{ 
-						fwrite( $file_handle, $file['content'] );
-						fclose( $file_handle );
-
-					} // endif
-				} // endif
-			} // endforeach
 		}
 
 	} // endclass
