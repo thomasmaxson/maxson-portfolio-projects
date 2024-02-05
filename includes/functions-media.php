@@ -47,11 +47,12 @@ function maxson_portfolio_placeholder_image_src( $type = null )
 
 	if( ! is_null( $type ) && ! empty( $type ) && 'none' != $type )
 	{ 
-		$placeholder = plugins_url( "admin/images/placeholder-{$type}@2x.png", MAXSON_PORTFOLIO_FILE );
+		$file_path = "admin/images/placeholder-{$type}@2x.png";
+		$placeholder = MAXSON_PORTFOLIO_DIRNAME . $file_path;
 
 		if( file_exists( $placeholder ) )
 		{ 
-			$image_src = $placeholder;
+			$image_src = plugins_url( $file_path, MAXSON_PORTFOLIO_FILE );
 
 		} // endif
 	} // endif

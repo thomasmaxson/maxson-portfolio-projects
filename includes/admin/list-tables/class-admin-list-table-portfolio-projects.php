@@ -196,6 +196,34 @@ class Maxson_Portfolio_Projects_Admin_List_Table_Portfolio_Projects extends Maxs
 		$post_edit_link = get_edit_post_link( $post_id );
 		$post_title     = _draft_or_post_title();
 
+
+		if( has_post_thumbnail( $post_id ) )
+		{ 
+			$image = get_the_post_thumbnail( $post_id, array( 60, 60 ), array() );
+
+		} else
+		{ 
+			$type = maxson_project_get_type( $post_id, 'slug' );
+
+			$image = maxson_portfolio_placeholder_image( $type );
+
+		} // endif
+
+
+		// Project Media
+		if( current_user_can( 'edit_post', $post_id ) )
+		{ 
+			printf( '<a href="%1$s" class="media-thumbnail">%2$s</a>', esc_url( $post_edit_link ), $image );
+
+		} else
+		{ 
+			printf( '<span class="media-thumbnail">%1$s</span>', $image );
+
+		} // endif
+
+
+
+
 		if( $parent_id > 0 && ( $archive_id !== $parent_id ) )
 		{ 
 			$parent_edit_link = get_edit_post_link( $parent_id );

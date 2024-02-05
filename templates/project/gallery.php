@@ -26,6 +26,12 @@ if( count( $attributes['ids'] ) > 0 )
 
 		<?php foreach( $attributes['ids'] as $attachment_id )
 		{ 
+			if( ! maxson_portfolio_attachment_exists( $attachment_id ) )
+			{ 
+				continue;
+
+			} // endif
+
 			$attachment_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 
 			$attachment_caption = wp_get_attachment_caption( $attachment_id );
@@ -86,5 +92,13 @@ if( count( $attributes['ids'] ) > 0 )
 	 */
 
 	do_action( 'maxson_portfolio_project_carousel_after', $attributes );
+
+} else 
+{ 
+	/**
+	 * maxson_portfolio_project_carousel_no_slides hook
+	 */
+
+	do_action( 'maxson_portfolio_project_carousel_no_slides', $attributes );
 
 } // endif ?>

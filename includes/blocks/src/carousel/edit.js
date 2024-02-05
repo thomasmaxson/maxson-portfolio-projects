@@ -28,6 +28,7 @@ import {
 import {
 	Button,
 	PanelBody,
+	PanelRow,
 	SelectControl,
 	TextControl,
 	ToggleControl,
@@ -373,55 +374,65 @@ export default function Edit(
 
 
 				<InspectorControls>
-					<PanelBody title={ __( 'Carousel Settings', 'maxson' ) } initialOpen={ true }>
-						<ToggleControl
-							label={ __( 'Autoplay', 'maxson' ) }
-							checked={ !! autoplay }
-							onChange={ ( value ) => {
-								setAttributes( { autoplay: value } );
-							} }
-						/>
-						{ autoplay ?
+					<PanelBody title={ __( 'Settings', 'maxson' ) } initialOpen={ true }>
+						<PanelRow>
 							<ToggleControl
-								label={ __( 'Pause on action', 'maxson' ) }
-								checked={ !! pauseOnAction }
+								label={ __( 'Autoplay', 'maxson' ) }
+								checked={ !! autoplay }
 								onChange={ ( value ) => {
-									setAttributes( { pauseOnAction: value } );
+									setAttributes( { autoplay: value } );
 								} }
 							/>
+						</PanelRow>
+						{ autoplay ?
+							<PanelRow>
+								<ToggleControl
+									label={ __( 'Pause on action', 'maxson' ) }
+									checked={ !! pauseOnAction }
+									onChange={ ( value ) => {
+										setAttributes( { pauseOnAction: value } );
+									} }
+								/>
+							</PanelRow>
 						 	: ''
 						}
 						{ autoplay ?
-							<ToggleControl
-								label={ __( 'Pause on hover', 'maxson' ) }
-								checked={ !! pauseOnHover }
-								onChange={ ( value ) => {
-									setAttributes( { pauseOnHover: value } );
-								} }
-							/>
+							<PanelRow>
+								<ToggleControl
+									label={ __( 'Pause on hover', 'maxson' ) }
+									checked={ !! pauseOnHover }
+									onChange={ ( value ) => {
+										setAttributes( { pauseOnHover: value } );
+									} }
+								/>
+							</PanelRow>
 						 	: ''
 						}
-						<TextControl
-							label={ __( 'Speed', 'maxson' ) }
-							type='number'
-							min='100'
-							max='500'
-							value={ speed }
-							onChange={ ( value ) => {
-								setAttributes( { speed: value } );
-							} }
-						/>
-						<SelectControl
-							label={ __( 'Effect', 'maxson' ) }
-							value={ effect }
-							onChange={ ( value ) => {
-								setAttributes( { effect: value } );
-							} }
-							options={ effectOptions }
-						/>
+						<PanelRow>
+							<TextControl
+								label={ __( 'Speed', 'maxson' ) }
+								type='number'
+								min='100'
+								max='500'
+								value={ speed }
+								onChange={ ( value ) => {
+									setAttributes( { speed: value } );
+								} }
+							/>
+						</PanelRow>
+						<PanelRow>
+							<SelectControl
+								label={ __( 'Effect', 'maxson' ) }
+								value={ effect }
+								onChange={ ( value ) => {
+									setAttributes( { effect: value } );
+								} }
+								options={ effectOptions }
+							/>
+						</PanelRow>
 					</PanelBody>
 
-					<PanelBody title={ __( 'Carousel Controls', 'maxson' ) } initialOpen={ false }>
+					<PanelBody title={ __( 'Controls', 'maxson' ) } initialOpen={ false }>
 						<ToggleControl
 							label={ __( 'Show Navigation', 'maxson' ) }
 							checked={ !! showNavigation }

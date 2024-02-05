@@ -1,11 +1,9 @@
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
+ * WordPress dependenices
  */
-import { __ } from '@wordpress/i18n';
 
 import { useBlockProps } from '@wordpress/block-editor';
+
 
 /**
  * The save function defines the way in which the different attributes should
@@ -16,6 +14,7 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
+
 export default function save( { attributes } ) {
 
 	const { images, autoplay, pauseOnAction, pauseOnHover, speed, effect, showNavigation, showPagination, imageCrop } = attributes;

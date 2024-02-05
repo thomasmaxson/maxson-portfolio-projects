@@ -143,9 +143,7 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 				//	'map_meta_cap'        => true, 
 
 					// WordPress 4.3
-					'show_in_rest'          => true,
-					'rest_base'             => 'category', 
-					'rest_controller_class' => 'WP_REST_Terms_Controller'
+					'show_in_rest'          => true
 				);
 
 				$args = apply_filters( 'maxson_portfolio_taxonomy_category_args', $args );
@@ -178,15 +176,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 					'show_admin_column'     => false, 
 					'hierarchical'          => false, 
 					'query_var'             => true, 
-					'capability_type'       => 'project', 
 					'update_count_callback' => '_update_post_term_count', 
 					'rewrite'               => $rewrite, 
 					'labels'                => $labels, 
 
 					// WordPress 4.3
-					'show_in_rest'          => true,
-					'rest_base'             => 'role', 
-					'rest_controller_class' => 'WP_REST_Terms_Controller'
+					'show_in_rest'          => true
 				);
 
 				$args = apply_filters( 'maxson_portfolio_taxonomy_role_args', $args );
@@ -219,15 +214,12 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 					'show_admin_column'     => false, 
 					'hierarchical'          => false, 
 					'query_var'             => true, 
-					'capability_type'       => 'project', 
 					'update_count_callback' => '_update_post_term_count', 
 					'rewrite'               => $rewrite, 
 					'labels'                => $labels, 
 
 					// WordPress 4.3
-					'show_in_rest'          => true, 
-					'rest_base'             => 'tag', 
-					'rest_controller_class' => 'WP_REST_Terms_Controller'
+					'show_in_rest'          => true
 				);
 
 				$args = apply_filters( 'maxson_portfolio_taxonomy_tag_args', $args );
@@ -261,23 +253,19 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Taxonomies' ) )
 				} // endif
 
 				$args = array( 
-					'public'                => false, 
+					'public'                => true, 
 					'show_ui'               => true, 
-					'show_in_menu'          => false, 
-					'show_in_nav_menus'     => false, 
-
-					'show_tagcloud'         => false, 
-					'show_admin_column'     => false,
+					'show_in_nav_menus'     => true, 
+					'show_tagcloud'         => true, 
+					'show_admin_column'     => false, 
 					'hierarchical'          => false, 
-					'query_var'             => is_admin(), 
-				//	'capability_type'       => 'project', 
+					'query_var'             => true, 
 					'update_count_callback' => '_update_post_term_count', 
 					'rewrite'               => $rewrite, 
 					'labels'                => $labels, 
 
 					// WordPress 4.3
-					'show_in_rest'          => false, 
-					'rest_base'             => 'type'
+					'show_in_rest'          => true
 				);
 
 				$args = apply_filters( 'maxson_portfolio_taxonomy_type_args', $args );
