@@ -7,7 +7,16 @@
 	"title": "Portfolio Filter",
 	"category": "portfolioprojects",
 	"icon": "filter",
-	"attributes": {},
+	"attributes": {
+		"filterResetShow": {
+			"type": "boolean",
+			"default": true
+		},
+		"filterResetLabel": {
+			"type":"string",
+			"default": "All"
+		}
+	},
 	"example": {},
 	"supports": {
 		"html": false,
