@@ -29,31 +29,30 @@ ul.wp-block-portfolio-archive {
 		list-style: none;
 		border: 1px solid #999;
 		overflow: hidden;
-	}
-}
 
+		&.project-teaser { 
+			position: relative;
 
-.project-teaser { 
-	position: relative;
+			.entry-link { text-decoration: none;}
 
-	.entry-link { text-decoration: none;}
+			.entry-callout-label { 
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding: 5px;
+				color: var( --portfolio-project-callout-color-text, var( --wp--preset--color--base, #fff ) );
+				font-size: 80%;
+				background-color: var( --portfolio-project-callout-color-bg, var( --wp--preset--color--contrast, #000 ) );
+			}
 
-	.entry-callout-label { 
-		position: absolute;
-		top: 0;
-		right: 0;
-		padding: 5px;
-		color: var( --portfolio-project-callout-color-text, var( --wp--preset--color--base, #fff ) );
-		font-size: 80%;
-		background-color: var( --portfolio-project-callout-color-bg, var( --wp--preset--color--contrast, #000 ) );
-	}
+			.entry-summary { padding: 1rem;}
 
-	.entry-summary { padding: 1rem;}
+			.entry-title { margin: 0;}
 
-	.entry-title { margin: 0;}
-
-	.entry-meta { 
-		margin: 0;
-		margin-top: 1rem;
+			.entry-meta { 
+				margin: 0;
+				margin-top: 1rem;
+			}
+		}
 	}
 }

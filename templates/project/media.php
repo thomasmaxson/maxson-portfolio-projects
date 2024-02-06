@@ -14,3 +14,12 @@ if( ! defined( 'ABSPATH' ) )
 
 } // endif
 
+global $post;
+
+if( has_post_thumbnail() )
+{ ?>
+	<figure class="entry-featured-media">
+		<?php the_post_thumbnail( $post, 'project_large' ); ?>
+	</figure>
+
+<?php } // endif ?>

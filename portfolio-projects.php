@@ -251,9 +251,8 @@ final class Maxson_Portfolio_Projects
 		// Blocks
 		include_once( "{$blocks_folder}class-blocks.php" );
 		include_once( "{$blocks_folder}class-block-portfolio-grid.php" );
-		include_once( "{$blocks_folder}class-block-portfolio-filter.php" );
+		//include_once( "{$blocks_folder}class-block-portfolio-filter.php" );
 		include_once( "{$blocks_folder}class-block-portfolio-carousel.php" );
-		//include_once( "{$blocks_folder}class-block-portfolio-slide-image.php" );
 
 		// Admin Functions
 		include_once( "{$admin_folder}functions-admin.php"       );
@@ -381,29 +380,5 @@ function Portfolio_Projects()
 }
 
 Portfolio_Projects();
-
-
-
-
-
-
-
-
-/**
- * Set "Image" as the default value for Project Type taxonomy
- */
-
-function maxson_portfolio_acf_project_type_set_default_value( $value, $post_id, $field )
-{ 
-	if( $value === false && get_post_status( $post_id ) == 'auto-draft' )
-	{ 
-		// Project Type: Image term ID
-		$value = array( 293 );
-
-	} // endif
-
-	return $value;
-}
-//add_filter( 'acf/load_value/key=field_5f8af2d6c0dd3', 'maxson_portfolio_acf_project_type_set_default_value', 20, 3 );
 
 ?>

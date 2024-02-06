@@ -44,7 +44,9 @@ if( count( $attributes['ids'] ) > 0 )
 				'alt'   => $attachment_alt
 			), $attachment_id );
 
-			printf( '<li %1$s>', join( ' ', $attachment_attrs ) );
+			$generated_attrs = ( is_array( $attachment_attrs ) && count( $attachment_attrs ) > 0 ) ? ' ' . maxson_portfolio_build_html_attributes( $attachment_attrs ) : '';
+
+			printf( '<li%1$s>', $generated_attrs );
 
 				/**
 				 * maxson_portfolio_project_carousel_slide_before hook

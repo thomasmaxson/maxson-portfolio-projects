@@ -316,4 +316,52 @@ function maxson_portfolio_get_file_extension( $path )
 	return $extension;
 }
 
+
+/**
+ * Returns the generated HTML attributes
+ * 
+ * @param       array  $attrs (required) array of key/value attributes
+ * @return 		string HTML attrbiure
+ */
+
+function maxson_portfolio_build_html_attributes( $attrs = array() )
+{ 
+	if( empty( $attrs ) || ! is_array( $attrs ) )
+	{ 
+		return '';
+
+	} // endif
+
+	$attr_output = array();
+
+	foreach( $attrs as $key => $value )
+	{ 
+		if( is_bool( $value ) )
+		{ 
+			if( $value )
+			{ 
+				$attr_output[] = esc_attr( $key );
+
+			} // endif
+
+		} else
+		{ 
+			if( is_array( $value ) )
+			{ 
+				$formattedValue = join( ' ', array_map( 'esc_attr', $value ) );
+
+			} else
+			{ 
+				$formattedValue = ( in_array( $key, array( 'href', 'src' ) ) ) ? esc_url( $value ) : esc_attr( $value );
+
+			} // endif
+
+			$attr_output[] = sprintf( '%1$s="%2$s"', $key, $formattedValue );
+
+		} // endif
+	} // endforeach
+
+	return join( ' ', $attr_output );
+}
+
 ?>

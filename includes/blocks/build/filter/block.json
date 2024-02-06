@@ -5,16 +5,23 @@
   "description": "Portfolio projects filter",
   "version": "1.0.0",
   "title": "Portfolio Filter",
+  "keywords": [
+    "sort"
+  ],
   "category": "portfolioprojects",
   "icon": "filter",
   "attributes": {
-    "filterResetShow": {
+    "resetShow": {
       "type": "boolean",
       "default": true
     },
-    "filterResetLabel": {
+    "resetLabel": {
       "type": "string",
       "default": "All"
+    },
+    "taxonomy": {
+      "type": "string",
+      "default": "project_type"
     }
   },
   "example": {},
