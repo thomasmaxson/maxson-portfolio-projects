@@ -19,46 +19,22 @@ if( ! defined( 'ABSPATH' ) )
 
 if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Project_Carousel' ) )
 { 
-	class Maxson_Portfolio_Projects_Block_Project_Carousel { 
+	if( ! class_exists( 'Maxson_Portfolio_Projects_Block', false ) )
+	{ 
+		include_once( 'abstract-class-block-portfolio.php' );
+	
+	} // endif
+
+
+	class Maxson_Portfolio_Projects_Block_Project_Carousel extends Maxson_Portfolio_Projects_Block { 
 
 		/**
-		 * Construct
+		 * Block
+		 *
+		 * @var         string
 		 */
 
-		public function __construct()
-		{ 
-			if( ! function_exists( 'register_block_type' ) )
-			{ 
-				return;
-
-			} // endif
-
-			add_action( 'init', array( &$this, 'init' ) );
-
-			add_action( 'enqueue_block_editor_assets', array( &$this,'assets' ) );
-		}
-
-
-		/**
-		 * Initialize custom block
-		 */
-
-		function init()
-		{ 
-			register_block_type( __DIR__ . '/build/carousel', array( 
-				'render_callback' => array( $this, 'render_block' )
-			) );
-		}
-
-
-		/**
-		 * Initialize custom block
-		 */
-
-		function assets()
-		{ 
-			wp_enqueue_script( 'maxson-portfolio-projects-carousel', plugins_url( 'editor-scripts.js', __FILE__ ), array(), '1.0', 'all' );
-		}
+		protected $block_name = __DIR__ . '/build/carousel';
 
 
 		/**

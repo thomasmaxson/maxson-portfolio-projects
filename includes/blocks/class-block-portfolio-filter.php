@@ -19,34 +19,22 @@ if( ! defined( 'ABSPATH' ) )
 
 if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Portfolio_Filter' ) )
 { 
-	class Maxson_Portfolio_Projects_Block_Portfolio_Filter { 
+	if( ! class_exists( 'Maxson_Portfolio_Projects_Block', false ) )
+	{ 
+		include_once( 'abstract-class-block-portfolio.php' );
+	
+	} // endif
+
+
+	class Maxson_Portfolio_Projects_Block_Portfolio_Filter extends Maxson_Portfolio_Projects_Block { 
 
 		/**
-		 * Construct
+		 * Block
+		 *
+		 * @var         string
 		 */
 
-		public function __construct()
-		{ 
-			if( ! function_exists( 'register_block_type' ) )
-			{ 
-				return;
-
-			} // endif
-
-			add_action( 'init', array( &$this, 'init' ) );
-		}
-
-
-		/**
-		 * Initialize custom block
-		 */
-
-		function init()
-		{ 
-			register_block_type( __DIR__ . '/build/filter', array( 
-				'render_callback' => array( $this, 'render_block' )
-			) );
-		}
+		protected $block_name = __DIR__ . '/build/filter';
 
 
 		/**
@@ -55,7 +43,45 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Portfolio_Filter' ) )
 
 		function render_block( $attributes, $content, $block )
 		{ 
-			$output = sprintf( '<p>%1$s</p>', __( 'Portfolio filter gets placed here.', 'maxson' ) );
+			$output = '';
+
+			$classes = $this->get_block_classes( $attributes, array( 
+				'portfolio-filter-variation-' . $attributes['variation']
+			) );
+
+			$blockAttrs = get_block_wrapper_attributes( array( 
+				'class' => $classes
+			) );
+
+			ob_start();
+
+			if( 'select' === $attributes['variation'] )
+			{ 
+				printf( '<form %1$s>', $blockAttrs );
+
+				maxson_portfolio_template( 'portfolio-filter/select.php', array( 
+					'block'      => $block, 
+					'attributes' => $attributes
+				) );
+
+				echo '</form>';
+
+			} else
+			{ 
+				printf( '<ul %1$s>', $blockAttrs );
+
+				maxson_portfolio_template( 'portfolio-filter/list.php', array( 
+					'block'      => $block, 
+					'attributes' => $attributes
+				) );
+
+				echo '</ul>';
+
+			} // endif
+
+			$output .= ob_get_contents();
+
+			ob_end_clean();
 
 			return $output;
 		}

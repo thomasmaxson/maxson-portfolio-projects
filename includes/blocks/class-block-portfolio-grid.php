@@ -19,34 +19,22 @@ if( ! defined( 'ABSPATH' ) )
 
 if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Portfolio' ) )
 { 
-	class Maxson_Portfolio_Projects_Block_Portfolio { 
+	if( ! class_exists( 'Maxson_Portfolio_Projects_Block', false ) )
+	{ 
+		include_once( 'abstract-class-block-portfolio.php' );
+	
+	} // endif
+
+
+	class Maxson_Portfolio_Projects_Block_Portfolio extends Maxson_Portfolio_Projects_Block { 
 
 		/**
-		 * Construct
+		 * Block
+		 *
+		 * @var         string
 		 */
 
-		public function __construct()
-		{ 
-			if( ! function_exists( 'register_block_type' ) )
-			{ 
-				return;
-
-			} // endif
-
-			add_action( 'init', array( &$this, 'init' ) );
-		}
-
-
-		/**
-		 * Initialize custom block
-		 */
-
-		function init()
-		{ 
-			register_block_type( __DIR__ . '/build/portfolio', array( 
-				'render_callback' => array( $this, 'render_block' )
-			) );
-		}
+		protected $block_name = __DIR__ . '/build/portfolio';
 
 
 		/**
@@ -114,25 +102,18 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Portfolio' ) )
 
 			$args = $this->get_query_args( $attributes );
 
-			$query = new WP_Query( $args );
+			$query = new Portfolio_Query( $args );
 
 			if( $query->have_posts() )
 			{ 
 				$columns = $this->get_column_count( $attributes );
 
-				$classes = array(
-					'wp-block-portfolio-archive', 
+				$classes = $this->get_block_classes( $attributes, array( 
 					sprintf( 'portfolio-grid-columns-%1$s', $columns )
-				);
-
-				if( isset( $attributes['className'] ) && $attributes['className'] )
-				{ 
-					array_push( $classes, $attributes['className'] );
-
-				} // endif
+				) );
 
 				$blockAttrs = get_block_wrapper_attributes( array( 
-					'class' => join( ' ', $classes )
+					'class' => $classes
 				) );
 
 				$output .= sprintf( '<ul %1$s>', $blockAttrs );
@@ -143,7 +124,10 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Block_Portfolio' ) )
 
 					ob_start();
 
-					maxson_portfolio_template_part( 'content', 'project-teaser' );
+					maxson_portfolio_template( 'project-teaser/core.php', array( 
+						'block'      => $block, 
+						'attributes' => $attributes
+					) );
 
 					$output .= ob_get_contents();
 
