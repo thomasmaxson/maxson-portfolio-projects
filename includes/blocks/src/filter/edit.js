@@ -32,34 +32,37 @@ import metadata from './block.json';
 import './editor.scss';
 
 
-const postType = useSelect( select => { 
-    const { getCurrentPostType } = select( 'core/editor' );
-    return getCurrentPostType();
-}, [] );
-
-
-const taxonomies = useSelect( select => {
-    const { getTaxonomies } = select( 'core' );
-    return getTaxonomies( { type: postType } );
-}, [ postType ] );
-
-
-const taxonomyOptions = taxonomies?.map( taxonomy => ( {
-    label: taxonomy.name, 
-    value: taxonomy.slug
-} ) );
-
-
-
 export default function Edit( { attributes, setAttributes } ) {
 	const blockProps = useBlockProps( {
 		className: 'portfolio-project-archive-filters',
 	} );
 
-	const { taxonomy, resetShow, resetLabel } = attributes;
+
+	const { taxonomy, variation, resetShow, resetLabel } = attributes;
 
 
+	const postType = useSelect( select => { 
+	    const { getCurrentPostType } = select( 'core/editor' );
+	    return getCurrentPostType();
+	}, [] );
 
+
+	const taxonomies = useSelect( select => {
+	    const { getTaxonomies } = select( 'core' );
+	    return getTaxonomies( { type: postType } );
+	}, [ postType ] );
+
+
+	const taxonomyOptions = taxonomies?.map( taxonomy => ( {
+	    label: taxonomy.name, 
+	    value: taxonomy.slug
+	} ) );
+
+
+	const variationOptions = [
+		{ value: 'list', label: _x( 'List', 'Carousel transition type', 'maxson' ) },
+		{ value: 'select', label: _x( 'Dropdown', 'Carousel transition type', 'maxson' ) }
+	];
 
 
 	return (
@@ -74,6 +77,16 @@ export default function Edit( { attributes, setAttributes } ) {
 								setAttributes( { taxonomy: value } );
 							} }
 							options={ taxonomyOptions }
+						/>
+					</PanelRow>
+					<PanelRow>
+						<SelectControl
+							label={ __( 'List Style', 'maxson' ) }
+							value={ variation }
+							onChange={ ( value ) => {
+								setAttributes( { variation: value } );
+							} }
+							options={ variationOptions }
 						/>
 					</PanelRow>
 					<PanelRow>

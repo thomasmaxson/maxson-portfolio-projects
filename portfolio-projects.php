@@ -244,6 +244,7 @@ final class Maxson_Portfolio_Projects
 		include_once( "{$includes_folder}class-install.php"    );
 	//	include_once( "{$includes_folder}class-meta.php"       );
 		include_once( "{$includes_folder}class-media.php"      );
+		include_once( "{$includes_folder}class-query.php"      );
 		include_once( "{$includes_folder}class-permalinks.php" );
 		include_once( "{$includes_folder}class-post-types.php" );
 		include_once( "{$includes_folder}class-taxonomies.php" );
@@ -251,7 +252,7 @@ final class Maxson_Portfolio_Projects
 		// Blocks
 		include_once( "{$blocks_folder}class-blocks.php" );
 		include_once( "{$blocks_folder}class-block-portfolio-grid.php" );
-		//include_once( "{$blocks_folder}class-block-portfolio-filter.php" );
+		include_once( "{$blocks_folder}class-block-portfolio-filter.php" );
 		include_once( "{$blocks_folder}class-block-portfolio-carousel.php" );
 
 		// Admin Functions

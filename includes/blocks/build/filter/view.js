@@ -1,1 +1,0 @@
-console.log("Hello World! (from maxson-portfolio-projects/portfolio-filter block)");

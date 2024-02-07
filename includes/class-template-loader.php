@@ -34,79 +34,8 @@ if( ! class_exists( 'Maxson_Portfolio_Projects_Template_Loader' ) )
 
 		public function __construct()
 		{ 
-			add_filter( 'template_include', array( &$this, 'template_loader' ), 99 );
-
 			add_filter( 'archive-portfolio_project_template', array( &$this, 'archive_template' ) );
 			add_filter( 'single-portfolio_project_template', array( &$this, 'single_template' ) );
-		}
-
-
-		/**
-		 * Load a template
-		 * Handles template usage so that we can use our own templates instead of the themes
-		 * 
-		 * Templates are in the 'templates' folder. Projects look for theme overrides in /theme/portfolio/ by default
-		 * 
-		 * @param       mixed $template
-		 * @return      string
-		 */
-
-		public function template_loader( $template )
-		{ 
-			global $post;
-
-			$find = array( 'portfolio-projects.php' );
-			$file = '';
-
-			$template_path = Portfolio_Projects()->template_path();
-			$plugin_path   = MAXSON_PORTFOLIO_PLUGIN_PATH;
-
-			if( is_project() )
-			{ 
-				$file = 'single-project.php';
-
-				$find[] = $file;
-				$find[] = "{$template_path}/{$file}";
-
-
-			} elseif( is_portfolio_taxonomy() )
-			{ 
-				$term_obj = get_queried_object();
-
-				$taxonomy = $term_obj->taxonomy;
-				$slug     = $term_obj->slug;
-
-				$file = "taxonomy-{$taxonomy}.php";
-
-				$find[] = "taxonomy-{$taxonomy}-{$slug}.php";
-				$find[] = "{$template_path}/taxonomy-{$taxonomy}-{$slug}.php";
-
-				$find[] = "taxonomy-{$taxonomy}.php";
-				$find[] = "{$template_path}/taxonomy-{$taxonomy}.php";
-
-				$find[] = $file;
-				$find[] = "{$template_path}/{$file}";
-
-			} elseif( maxson_portfolio_is_archive_page() || is_post_type_archive( self::POST_TYPE ) )
-			{ 
-				$file = 'archive-portfolio.php';
-
-				$find[] = $file;
-				$find[] = "{$template_path}/{$file}";
-
-			} // endif
-
-
-			if( $file )
-			{ 
-				$template = locate_template( array_unique( $find ), false );
-
-				if( ! $template )
-					$template = "{$plugin_path}/templates/{$file}";
-
-			} // endif
-
-			return $template;
 		}
 
 

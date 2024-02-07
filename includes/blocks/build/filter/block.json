@@ -11,6 +11,14 @@
   "category": "portfolioprojects",
   "icon": "filter",
   "attributes": {
+    "variation": {
+      "type": "string",
+      "default": "select"
+    },
+    "taxonomy": {
+      "type": "string",
+      "default": "project_category"
+    },
     "resetShow": {
       "type": "boolean",
       "default": true
@@ -18,10 +26,6 @@
     "resetLabel": {
       "type": "string",
       "default": "All"
-    },
-    "taxonomy": {
-      "type": "string",
-      "default": "project_type"
     }
   },
   "example": {},
@@ -37,8 +41,5 @@
   },
   "textdomain": "maxson",
   "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css",
-  "render": "file:./render.php",
-  "viewScript": "file:./view.js"
+  "editorStyle": "file:./index.css"
 }

@@ -17,6 +17,27 @@ if( ! defined( 'ABSPATH' ) )
 } // endif
 
 
+// Resuable instance of WP_Query with preset $args
+class Portfolio_Query extends WP_Query { 
+
+	/**
+	 * Post Type
+	 */
+
+	const POST_TYPE = 'portfolio_project';
+
+	
+	function __construct( $args = array() )
+	{ 
+		// Cannot override
+		$args['post_type'] =self:: POST_TYPE;
+
+		// Run query
+		parent::query( $args );
+	}
+} // endclass
+
+
 if( ! class_exists( 'Maxson_Portfolio_Projects_Query' ) )
 {  
 	class Maxson_Portfolio_Projects_Query { 
